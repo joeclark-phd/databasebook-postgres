@@ -1,5 +1,7 @@
 # Chapter 1: How databases fit in
 
+## Introduction
+
 Imagine that you work in a small direct-response mail order company that takes orders from customers by phone.  Each agent in the call center downstairs has a stack of paper order forms on his desk, and when he receives an order he writes down the product name(s), quantity ordered, and the customer's address and payment information.  He uses a calculator or computer to sum up the order total, and tells the customer how much they'll be charged.  
 
 Periodically, a data entry worker visits the call center and picks up stacks of filled-in order forms.  She enters each order's details into a file on her desktop computer, perhaps a big Excel spreadsheet that she's designed herself for this task.  At the end of the day, when all the orders are entered, she sends the complete file to two other departments: fulfillment, which processes the customer's credit card and packs and ships the orders, and accounting, which calculates each salesperson's commission.
@@ -16,7 +18,7 @@ This is the kind of process that a small business might develop when it's first 
 
 As this small business becomes a medium-sized enterprise, the seeming convenience of using a spreadsheet can become a nightmare of data management.  Before long, the data entry workers, accountants, and other departments may find they spend more time managing spreadsheets than doing their main jobs.  And sooner or later, management may wish to use the historical order data for a new purpose, such as customer relationship management (CRM) or business intelligence (BI).  What they'll find is that the data is spread out over a huge number of files, with multiple versions of each file existing in different places, and older files having a different structure and meaning from newer files.  What a mess!
 
-> **Aside**: There are lots of other problems we could imagine in this scenario, but I wanted to keep it brief.  One that ought to be mentioned is the security disaster posed by this system.  The spreadsheet in my story contains customers' credit card numbers as well as personally identifying information, and it's being passed around willy-nilly between departments.  Moreover, any employee with a grievance could walk out the door with all of the data on a thumb drive, and who would know?
+A> There are lots of other problems we could imagine in this scenario, but I wanted to keep it brief.  One that ought to be mentioned is the security disaster posed by this system.  The spreadsheet in my story contains customers' credit card numbers as well as personally identifying information, and it's being passed around willy-nilly between departments.  Moreover, any employee with a grievance could walk out the door with all of the data on a thumb drive, and who would know?
 
 ## A database
 
@@ -32,13 +34,13 @@ A **database administrator** (DBA) is therefore responsible for a key component 
 
 Server-based databases vary widely in scale and scope.  Some databases support a single application, such as a dynamic website, and these may run on the same physical computer as the application's code.  A larger database might run on a dedicated machine that multiple users access over the network; for example, a company may keep a database of customer relationship information which can be accessed by sales, marketing, and customer service systems.  
 
-> **Aside:** The term "server" means a software or hardware system that is constantly listening for requests or commands and reacting to them.  When a software server runs on a computer dedicated to that purpose, the computer itself is also called a "server".
+A> The term "server" means a software or hardware system that is constantly listening for requests or commands and reacting to them.  When a software server runs on a computer dedicated to that purpose, the computer itself is also called a "server".
 
 Larger still are **enterprise-scale** databases that integrate a wide variety of subject areas.  This category includes enterprise resource planning (ERP) systems that integrate several areas of business operations, and enterprise data warehouses (EDW) used for analysis and reporting of business performance.  Enterprise-scale databases may run on mainframes or may be distributed over large clusters of dozens or hundreds of computers.
 
-> **Aside**: It is worth noting that there are also what we may call "personal" or "desktop" databases that run on personal computers and do not remain active when not in use.  These databases are created with programs such as SQLite and Microsoft Access (the two you're most likely to encounter) and are saved as files.  They have many of the features for structuring and querying data that you'll learn from this book, such as the SQL query language, but for business use they would still pose most of the same problems as the spreadsheets in my opening vignette.  You would still end up with lots of different versions of the same (database) files with inconsistent data kept by different people and departments.  
+A> It is worth noting that there are also what we may call "personal" or "desktop" databases that run on personal computers and do not remain active when not in use.  These databases are created with programs such as SQLite and Microsoft Access (the two you're most likely to encounter) and are saved as files.  They have many of the features for structuring and querying data that you'll learn from this book, such as the SQL query language, but for business use they would still pose most of the same problems as the spreadsheets in my opening vignette.  You would still end up with lots of different versions of the same (database) files with inconsistent data kept by different people and departments.  
 
-> If your goal is simply to learn SQL or relational data modeling, though, SQLite and Access are both fine choices.
+A> If your goal is simply to learn SQL or relational data modeling, though, SQLite and Access are both fine choices.
 
 ## What you'll learn from this book
 
@@ -52,7 +54,7 @@ The database of choice for this book is PostgreSQL (often nicknamed "Postgres"),
 
 Rest assured that the lessons of this book are transferable to other relational databases.  Each of the major brands has its own quirks and special features, but this book mainly covers the fundamentals that apply everywhere.  As currently planned, one chapter will exhibit some of PostgreSQL's special features.
 
-> **Aside:** If this book finds any significant success with readers, I fully intend to create additional versions of the text that highlight SQLite, MySQL, Access, or whatever other platforms people are interested in.  Give me feedback!
+A> If this book finds any significant success with readers, I fully intend to create additional versions of the text that highlight SQLite, MySQL, Access, or whatever other platforms people are interested in.  Give me feedback!
 
 ## Example 1: your first PostgreSQL database
 
