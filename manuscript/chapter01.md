@@ -39,7 +39,7 @@ A> The term "server" means a software or hardware system that is constantly list
 Larger still are **enterprise-scale** databases that integrate a wide variety of subject areas.  This category includes enterprise resource planning (ERP) systems that integrate several areas of business operations, and enterprise data warehouses (EDW) used for analysis and reporting of business performance.  Enterprise-scale databases may run on mainframes or may be distributed over large clusters of dozens or hundreds of computers.
 
 A> It is worth noting that there are also what we may call "personal" or "desktop" databases that run on personal computers and do not remain active when not in use.  These databases are created with programs such as SQLite and Microsoft Access (the two you're most likely to encounter) and are saved as files.  They have many of the features for structuring and querying data that you'll learn from this book, such as the SQL query language, but for business use they would still pose most of the same problems as the spreadsheets in my opening vignette.  You would still end up with lots of different versions of the same (database) files with inconsistent data kept by different people and departments.  
-
+A> 
 A> If your goal is simply to learn SQL or relational data modeling, though, SQLite and Access are both fine choices.
 
 ## What you'll learn from this book
