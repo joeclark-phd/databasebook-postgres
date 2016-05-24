@@ -1,4 +1,4 @@
-# Chapter 1: How databases fit in
+# How databases fit in
 
 ## Introduction
 

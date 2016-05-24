@@ -1,3 +1,3 @@
-# Chapter 5: More relational patterns
+# More relational patterns
 
 coming soon

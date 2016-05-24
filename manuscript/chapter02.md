@@ -1,3 +1,3 @@
-# Chapter 2: The Relational Model
+# The Relational Model
 
 coming soon

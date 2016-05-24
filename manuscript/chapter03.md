@@ -1,3 +1,3 @@
-# Chapter 3: Querying the data
+# Querying the data
 
 coming soon

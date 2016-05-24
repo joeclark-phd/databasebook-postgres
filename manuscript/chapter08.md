@@ -1,3 +1,3 @@
-# Chapter 8: Just enough physical database design
+# Just enough physical database design
 
 coming soon
