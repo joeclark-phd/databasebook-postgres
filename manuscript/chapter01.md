@@ -44,7 +44,7 @@ A> If your goal is simply to learn SQL or relational data modeling, though, SQLi
 
 ## What you'll learn from this book
 
-This book will introduce you to relational databases, with data modeling and SQL first and foremost.  It covers the scope of a typical first database course in an information systems or analytics program at the university level.  It can be used as a textbook for an instructor-led course---instructors, please contact the author for an instructor's guide, slides and materials--or used for self-guided study with or without the video lectures produced by the author (coming soon via Leanpub).
+This book will introduce you to **relational databases**, with data modeling and SQL first and foremost.  It covers the scope of a typical first database course in an information systems or analytics program at the university level.  It can be used as a textbook for an instructor-led course---instructors, please contact the author for an instructor's guide, slides and materials--or used for self-guided study with or without the video lectures produced by the author (coming soon via Leanpub).
 
 My main goal in creating this book is to make data modeling and SQL understandable to the reader, so it may serve as a good low-cost supplement for students who are struggling with a theory-heavy textbook and having a hard time getting the point.  Instead of starting with loads of theory up-front, I'll take a more pragmatic approach based on relational data modeling "patterns" and examples.  
 
@@ -58,4 +58,40 @@ A> If this book finds any significant success with readers, I fully intend to cr
 
 ## Example 1: your first PostgreSQL database
 
-Coming soon!
+### Up and running with Postgres
+
+PostgreSQL is available for free at [www.postgresql.org](http://www.postgresql.org) and is extremely well documented there.  Installation instructions will vary depending on your platform, and should be pretty straightforward.  You can probably accept all the default configuration options. Be sure to remember the password you set during installation.  You're up and running when you can enter the command `psql -V` at your system's command line, and the system responds by telling you the version of PostgreSQL installed.  At the time of this writing, it looks like this for me:
+
+    $ psql -V
+    psql (PostgreSQL) 9.4.1
+    
+If that doesn't make any sense to you, see Appendix A for my detailed guide to installing Postgres on Windows, Mac, and Linux, or refer to the online documentation **here**.
+
+### Relations are tables
+
+Databases can be classified according to the types of abstractions they allow you to model your data with.  In a relational database, data is modeled as a set of tables with structured rows and columns.  Other data models are possible.  In a **document-oriented database** such as MongoDB, data is modeled as documents with tree-like structures.  In a **graph database** like Neo4J, data is structured as a network diagram (a mathematical graph) with nodes and edges.  Compared to those newer forms, the relational model is far more commonly seen and better understood, and is the most versatile.  Relational databases have been tried and tested in business for nearly four decades, and are probably the best tool for the job in all but a few specialized cases.
+
+The tables you find in a relational database are properly called relations.  A **relation** is not just any table; it is a construct found in set theory and is defined by the following characteristics:
+
+- Every row has the same columns.
+- Column names must all be different.
+- Each column is defined to contain just one specific type of data.
+- Each row must be unique; usually we enforce this by adding a machine-generated ID number to each row.  This column is known as the "primary key" column.
+- No inherent ordering of rows or columns, or other information about how to display the data, is stored in the table.
+
+Consequently, a relation is a simpler and less flexible structure than a table you might create in a spreadsheet program like Microsoft Excel.  Spreadsheets allow you to mix data types, to have rows with different numbers of columns, and to decorate your data with **display logic** like fonts, colors, and sizing.  Figures 1-1 and 1-2 illustrate the comparison.
+
+![Figure 1-1: A typical spreadsheet data table](/images/1-1spreadsheet.png)
+
+In the spreadsheet, the user can be flexible with data types, for example inserting the text "NA" in a column that's meant to hold a number.  Data types unanticipated at the time the table was designed could be inserted freely; for example, a Canadian postal code could be inserted into a "zip code" column despite that it is longer than a US zip code and contains letters.  The spreadsheet user can also decorate the data with fonts, styles, sizes and colors in order to make it more readable, and he can add extra information like a "grand total" row.
+
+As seen in Figure 1-2, a database table (or relation) is much more strictly defined.  Data types must be specified in advance for each column, guaranteeing uniformity.  That means special cases must be anticipated before they occur.  In this example, the database designer specified that "null" values are allowed for Quantity, and any text of up to 10 characters is allowed for a postal code.  In order to guarantee that each row is unique, and therefore can be looked up, we add a primary key column and populate it with an auto-generated ID number.
+
+![Figure 1-2: The same table as it would exist in a database](/images/1-2relation.png)
+
+No other information is found in the rows of a relation except the data itself: not fonts and styles, and not even the sort order.  Totals, averages, and the like wouldn't be stored in the table either, because rows correspond only to individual data "records".  Aggregated values like totals and averages could be calculated in a query or perhaps stored in additional tables created specifically for the purpose.
+
+### Creating your first relation
+
+Let's fire up Postgres and create a table.  (I probably won't use the word "relation" much after this, except for a bit of theory in Chapter 2.  Where I write "table", you should be able to figure out what I mean.)
+
