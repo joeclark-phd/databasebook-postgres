@@ -93,5 +93,6 @@ No other information is found in the rows of a relation except the data itself: 
 
 ### Creating your first relation
 
-Let's fire up Postgres and create a table.  (I probably won't use the word "relation" much after this, except for a bit of theory in Chapter 2.  Where I write "table", you should be able to figure out what I mean.)
+Let's fire up PostgreSQL and create a table.  (I probably won't use the word "relation" much after this, except for a bit of theory in Chapter 2.  Where I write "table", you should be able to figure out what I mean.)
 
+**to be completed**
