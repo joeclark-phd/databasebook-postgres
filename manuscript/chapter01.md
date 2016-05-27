@@ -1,6 +1,6 @@
-# How databases fit in
+# Introducing databases and PostgreSQL
 
-## Introduction
+## How databases fit in
 
 Imagine that you work in a small direct-response mail order company that takes orders from customers by phone.  Each agent in the call center downstairs has a stack of paper order forms on his desk, and when he receives an order he writes down the product name(s), quantity ordered, and the customer's address and payment information.  He uses a calculator or computer to sum up the order total, and tells the customer how much they'll be charged.  
 
@@ -20,13 +20,13 @@ As this small business becomes a medium-sized enterprise, the seeming convenienc
 
 A> There are lots of other problems we could imagine in this scenario, but I wanted to keep it brief.  One that ought to be mentioned is the security disaster posed by this system.  The spreadsheet in my story contains customers' credit card numbers as well as personally identifying information, and it's being passed around willy-nilly between departments.  Moreover, any employee with a grievance could walk out the door with all of the data on a thumb drive, and who would know?
 
-## A database
+### A database
 
 Imagine instead if there was a **black box** in the office into which all those order forms were fed.  At any time, a person could ask the black box to retrieve any order record (or list of records) by time and date, by customer name, by product, or another attribute.  Fulfillment could ask for the payments waiting to be processed, and it would get a printout of exactly that.  Shipping could request invoices and mailing labels for orders ready to ship.  Accounting could ask for the sum of order totals taken by each salesperson for a given time period.  Moreover, changes could be filed in the black box and all subsequent requests would include the up-to-date, corrected information.  The black box serves as the manager of, and the official system of record for, all the company's order data.
 
 That's the big idea of a **database**.  Instead of having every person or department or program keep its own copy of the data, a database serves as a system of record, a "single source of truth" that can always be accessed by everyone who needs it for their different purposes.  A database stores some knowledge about the data's structure and meaning, or **metadata**, so diverse users can know what they're looking at.  And most importantly, a database offers flexible but easy-to-use **query** methods so that users can request just the data they want, whether it's a single record, a collection of data, or an aggregation into averages, counts, or sums.
 
-## A variety of databases
+### A variety of databases
 
 Databases come in many shapes and sizes and they serve a lot of different purposes.  Most often, a database acts as a **server**, that is, a software program that is always on, waiting for requests and responding to them.  It's necessary for databases to always be on and available if people and other software systems are going to depend on them to store data.  (Otherwise, those people and programs will have to store their own data locally, which defeats the purpose of a database -- independent and shared data management.)  
 
@@ -42,7 +42,7 @@ A> It is worth noting that there are also what we may call "personal" or "deskto
 A> 
 A> If your goal is simply to learn SQL or relational data modeling, though, SQLite and Access are both fine choices.
 
-## What you'll learn from this book
+### What you'll learn from this book
 
 This book will introduce you to **relational databases**, with data modeling and SQL first and foremost.  It covers the scope of a typical first database course in an information systems or analytics program at the university level.  It can be used as a textbook for an instructor-led course---instructors, please contact the author for an instructor's guide, slides and materials--or used for self-guided study with or without the video lectures produced by the author (coming soon via Leanpub).
 
