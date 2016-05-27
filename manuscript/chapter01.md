@@ -1,4 +1,4 @@
-# Introducing databases and PostgreSQL
+# Chapter 1: Introducing databases and PostgreSQL
 
 ## How databases fit in
 
@@ -56,16 +56,16 @@ Rest assured that the lessons of this book are transferable to other relational 
 
 A> If this book finds any significant success with readers, I fully intend to create additional versions of the text that highlight SQLite, MySQL, Access, or whatever other platforms people are interested in.  Give me feedback!
 
-## Example 1: your first PostgreSQL database
+## Lab 1: your first PostgreSQL database
 
 ### Up and running with Postgres
 
-PostgreSQL is available for free at [www.postgresql.org](http://www.postgresql.org) and is extremely well documented there.  Installation instructions will vary depending on your platform, and should be pretty straightforward.  You can probably accept all the default configuration options. Be sure to remember the password you set during installation.  You're up and running when you can enter the command `psql -V` at your system's command line, and the system responds by telling you the version of PostgreSQL installed.  At the time of this writing, it looks like this for me:
+PostgreSQL is available for free at [www.postgresql.org](https://www.postgresql.org) and is extremely well documented there.  Installation instructions will vary depending on your platform, and should be pretty straightforward.  You can probably accept all the default configuration options. Be sure to remember the password you set during installation.  You're up and running when you can enter the command `psql -V` at your system's command line, and the system responds by telling you the version of PostgreSQL installed.  At the time of this writing, it looks like this for me:
 
     $ psql -V
     psql (PostgreSQL) 9.4.1
     
-If that doesn't make any sense to you, see Appendix A for my detailed guide to installing Postgres on Windows, Mac, and Linux, or refer to the online documentation **here**.
+If that doesn't make any sense to you, see Appendix A for my detailed guide to installing Postgres on Windows, Mac, and Linux, or refer to the online [documentation](https://www.postgresql.org/docs/).
 
 ### Relations are tables
 

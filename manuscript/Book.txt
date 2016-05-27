@@ -12,4 +12,5 @@ chapter08.md
 chapter09.md
 chapter10.md
 backmatter.txt
+installation.md
 about_author.md
