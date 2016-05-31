@@ -63,7 +63,7 @@ A> If this book finds any significant success with readers, I fully intend to cr
 PostgreSQL is available for free at [www.postgresql.org](https://www.postgresql.org) and is extremely well documented there.  Installation instructions will vary depending on your platform, and should be pretty straightforward.  You can probably accept all the default configuration options. Be sure to remember the password you set during installation.  You're up and running when you can enter the command `psql -V` at your system's command line, and the system responds by telling you the version of PostgreSQL installed.  At the time of this writing, it looks like this for me:
 
     $ psql -V
-    psql (PostgreSQL) 9.4.1
+    psql (PostgreSQL) 9.5.3
     
 If that doesn't make any sense to you, see Appendix A for my detailed guide to installing Postgres on Windows, Mac, and Linux, or refer to the online [documentation](https://www.postgresql.org/docs/).
 
@@ -91,8 +91,51 @@ As seen in Figure 1-2, a database table (or relation) is much more strictly defi
 
 No other information is found in the rows of a relation except the data itself: not fonts and styles, and not even the sort order.  Totals, averages, and the like wouldn't be stored in the table either, because rows correspond only to individual data "records".  Aggregated values like totals and averages could be calculated in a query or perhaps stored in additional tables created specifically for the purpose.
 
-### Creating your first relation
+### Creating a PostgreSQL database
 
 Let's fire up PostgreSQL and create a table.  (I probably won't use the word "relation" much after this, except for a bit of theory in Chapter 2.  Where I write "table", you should be able to figure out what I mean.)
+
+First, a note about the term "database".  As I have described it above, a database is a system that organizes and stores data and, importantly, makes it available to people who need to search or retrieve it.  Others more precise than I will distinguish between the *database*, which is the organized data store, and the *database management system* (DBMS) which is a program like PostgreSQL that creates the database and grants access to it.  When we call PostgreSQL (or Oracle, or SQL Server, etc.) a database, we are using the term more generally to include both the database and the DBMS, since they go together.
+
+To understand how we interact with PostgreSQL, though, you need a third definition of the term.  In PostgreSQL, a database is a *logical* subdivision of the data store, which in some other systems might be called a *tablespace*.  You may create any number of tables grouped into databases on the same server.  (For the purposes of this book's labs, your personal computer is acting as a PostgreSQL server.)  Table names must be unique within a database, but not within a server.  If several examples in this book include a table called "customers", you can avoid a conflict by creating a new database for each lab.
+
+What we'll do in this first lab, then, is:
+
+1. Create a PostgreSQL database called "lab1"
+2. Log in to that database with `psql`
+3. Create a table of Purchases
+4. Query the single-table database with SQL
+
+#### Database creation
+
+You can create a database from your operating system's command line (i.e., before logging in to PostgreSQL with `psql` or another front-end tool), by using the command `createdb`.  The basic structure of this command is `createdb [OPTIONS] [DBNAME]`, and you can learn more by typing `createdb --help` at the command prompt.  The only optional parameter you need to specify is the identity of the database "user" that was created when you installed PostgreSQL.  The user "postgres" is the superuser who has power to make any and all changes to the server, including creating databases.  Thus, the following command creates a database called "lab1":
+
+    $ **createdb -U postgres lab1**
+
+If you did not specify a username with the `-U` parameter, `createdb` tries to log in to PostgreSQL with your computer account's username (in my case, "Joseph"). If I have set up such an account, `createdb lab1` would work.  But since I haven't, it fails.  One of the Challenges offered at the end of this chapter is to find out how to create a user account to make these commands less verbose.
+
+If necessary, you can also drop (i.e., delete) the new database from the commmand line, with:
+
+    $ **dropdb -U postgres lab1**
+    
+For future reference, you can alse create and delete databases using SQL once you're logged in to `psql`: the CREATE DATABASE and DROP DATABASE commands, respectively.  One way or another, create that database, which will be home to your first table.
+    
+#### Introducing `psql`
+
+The command-line client for PostgreSQL is `psql`, and like `createdb`, it needs to know the username you want to connect with.  Connect with `psql -U postgres`.  This will not open a new window, but rather you will see a brief welcome and the command prompt will be different from the operating system's default prompt.
+
+    $ psql -U postgres
+    psql (9.5.3)
+    Type "help" for help.
+
+    postgres=#
+
+
+
+#### Creating a table
+
+#### Querying your data with SQL
+
+
 
 **to be completed**
