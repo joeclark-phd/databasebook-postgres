@@ -130,8 +130,23 @@ The command-line client for PostgreSQL is `psql`, and like `createdb`, it needs 
 
     postgres=#
 
-The change in the command prompt means you're in a different environment.  Here, you can enter SQL queries or some commands specific to `psql`.  The first thing I'd recommend you do is type "help", which introduces you to a few of the latter.  Most `psql` commands begin with a backslash (\) and you can get a full listing of them by entering the command `\?`.  If you need to quit, `\q` is the command for that.  If you want to, take some time now to explore the lists of SQL queries and `psql` commands possible.
+The change in the command prompt means you're in a different environment.  Here, you can enter SQL queries or some commands specific to `psql`.  The first thing I'd recommend you do is type `help`, which introduces you to a few of the latter.  Most `psql` commands begin with a backslash (\\) and you can get a full listing of them by entering the command `\?`.  If you need to quit, `\q` is the command for that.  If you want to, take some time now to explore the lists of SQL queries and `psql` commands possible.
 
+    postgres=# help
+    You are using psql, the command-line interface to PostgreSQL.
+    Type:  \copyright for distribution terms
+           \h for help with SQL commands
+           \? for help with psql commands
+           \g or terminate with semicolon to execute query
+           \q to quit
+       
+By default, when you start `psql` you're connecting to the default database, which like the superuser is called "postgres".  Any SQL commands you enter at the prompt will be executed on that database's tables, which isn't what you want.  To switch over to the new database you created, use the `\c` command:
+
+    postgres=# \c lab1
+    YOu are now connected to database "lab1" as user "postgres".
+    lab1=#
+    
+...
 
 #### Creating a table
 
