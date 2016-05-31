@@ -110,13 +110,13 @@ What we'll do in this first lab, then, is:
 
 You can create a database from your operating system's command line (i.e., before logging in to PostgreSQL with `psql` or another front-end tool), by using the command `createdb`.  The basic structure of this command is `createdb [OPTIONS] [DBNAME]`, and you can learn more by typing `createdb --help` at the command prompt.  The only optional parameter you need to specify is the identity of the database "user" that was created when you installed PostgreSQL.  The user "postgres" is the superuser who has power to make any and all changes to the server, including creating databases.  Thus, the following command creates a database called "lab1":
 
-    $ **createdb -U postgres lab1**
+    $ createdb -U postgres lab1
 
 If you did not specify a username with the `-U` parameter, `createdb` tries to log in to PostgreSQL with your computer account's username (in my case, "Joseph"). If I have set up such an account, `createdb lab1` would work.  But since I haven't, it fails.  One of the Challenges offered at the end of this chapter is to find out how to create a user account to make these commands less verbose.
 
 If necessary, you can also drop (i.e., delete) the new database from the commmand line, with:
 
-    $ **dropdb -U postgres lab1**
+    $ dropdb -U postgres lab1
     
 For future reference, you can alse create and delete databases using SQL once you're logged in to `psql`: the CREATE DATABASE and DROP DATABASE commands, respectively.  One way or another, create that database, which will be home to your first table.
     
@@ -130,6 +130,7 @@ The command-line client for PostgreSQL is `psql`, and like `createdb`, it needs 
 
     postgres=#
 
+The change in the command prompt means you're in a different environment.  Here, you can enter SQL queries or some commands specific to `psql`.  The first thing I'd recommend you do is type "help", which introduces you to a few of the latter.  Most `psql` commands begin with a backslash (\) and you can get a full listing of them by entering the command `\?`.  If you need to quit, `\q` is the command for that.  If you want to, take some time now to explore the lists of SQL queries and `psql` commands possible.
 
 
 #### Creating a table
