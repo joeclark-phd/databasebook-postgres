@@ -52,7 +52,7 @@ Once you have updated the PATH and clicked "OK" in the Environment Variables con
 
 Setting the system's PATH has been a stumbling block for many of my students, especially since it has to be done on day one, but I promise that it only needs to be done once!
 
-![Figure A-8: PostgreSQL is now installed and accessible from the command line.](/images/A-78working.png)
+![Figure A-8: PostgreSQL is now installed and accessible from the command line.](/images/A-8working.png)
 
 ## Setting up PostgreSQL on a Mac
 
