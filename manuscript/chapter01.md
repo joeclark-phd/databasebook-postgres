@@ -146,12 +146,59 @@ By default, when you start `psql` you're connecting to the default database, whi
     YOu are now connected to database "lab1" as user "postgres".
     lab1=#
     
-...
+Notice that the prompt changes to tell you which database you're working in.  
 
 #### Creating a table
 
+To create a table in the "lab1" database, we use the aptly-named SQL [`CREATE TABLE`](https://www.postgresql.org/docs/9.5/static/sql-createtable.html) command.  I will expand on its usage in Chapter 2, but the basic form of it is as follows:
+
+    CREATE TABLE table_name (
+       column_name    data_type   [OPTIONS],
+       ...
+       );
+
+As I mentioned, one of the special characteristics of a relation is that each column allows data only of a specified type.  PostgreSQL offers a number of built-in data types, such as `numeric`, `text`, `date`, and more.  I will discuss the choice of data type more in Chapters 2 and 8, but it need not delay an introductory example.  There are many optional clauses available in the `CREATE TABLE` statement which can be discussed later or looked up in the documentation; the only one we need now is `PRIMARY KEY`, a flag which indicates that a particular column is going to contain unique values that may be used to look up specific rows later.
+
+The command to create our table of Purchases is as follows.  You may type this in at the `psql` prompt, even if it spans several lines.  The code won't execute until the semicolon (`;`) is reached.  Mind the cases: in PostgreSQL the SQL keywords (i.e. `CREATE TABLE`, `PRIMARY KEY`, and the data types) may be uppercase or lowercase, but you should only use lower case letters and underscores (`_`) for the table and column names.
+
+    CREATE TABLE purchases (
+    order_id integer PRIMARY KEY,
+    customer_name text,
+    zipcode text,
+    product text,
+    quantity integer,
+    order_total numeric );
+    
+If the command succeeded, you'll see "`CREATE TABLE`" in the output.  If there's an error message instead, don't worry, just try again.  The most likely causes of errors are typos in the data types, the wrong number of commas, and uppercase letters in the table or column names.  If the command worked but you defined the table incorrectly, the easiest solution is to start over by issuing the command `DROP TABLE purchases;` and creating the table anew.
+
+You can confirm that the table exists with the `psql` command `\dt`, which displays a table of all the tables in the currently selected database:
+
+    lab1=# \dt
+               List of relations
+     Schema |   Name    | Type  |  Owner   
+    ---------------------------------------
+     public | purchases | table | postgres
+     (1 row)
+
+That's all there is to defining a table, at least an empty one.  In order for us to demonstrate some SQL queries, though, we'll need to store some data in the table with the SQL [`INSERT`](https://www.postgresql.org/docs/9.5/static/sql-insert.html) command.  We'll use the simplest form of this command, adding only one row at a time to the table, for example:
+
+    INSERT INTO purchases VALUES
+    (1001, 'Clark', '85226', 'Block Plane', 1, 225.00);
+
+Take note that text data must be wrapped in quotation marks (`'`), and numbers must not.  Recall that the zip code column is defined as a text column in this case.  (Can you figure out why that might be?)
+
+Writing `INSERT` commands by hand will quickly become tiresome, and is not the usual mode of entering data into a real database.  Typically the database will support software (such as a web app, or an enterprise system) that generates data insertion and update commands automatically.  Another way we might load a lot of data quickly is to read in a file containing (presumably machine-generated) `INSERT` commands.  In `psql` you can execute SQL commands from a file using the `\i` command.
+
+I have provided a script file containing 100 lines of purchase data on the GitHub repository that supports this book.  You may find the file `purchases.txt` at https://github.com/joeclark-phd/databasebook-postgres, in the "psql_scripts" folder.  I have downloaded this file to my computer, a Windows laptop, and saved it in the directory `C:/psql_scripts`, so for me the command looks like this:
+
+    lab1=# \i c:/psql_scripts/purchases.sql
+    INSERT 0 1
+    ...
+    
+Be sure to use the correct file path for your operating system and the location where you downloaded the script.
+
+Regardless of how you insert data into the table, please add at least several records so that you can try some meaningful queries in the next section.  If you are experiencing errors with `INSERT` commands, check that the number of values you're inserting matches the number of columns in the table, that they're in the right order, and that the `order_id` number is unique for each inserted row.  If you run into problems, you can empty the table by entering the command `DELETE FROM purchases;` and start again.
+
 #### Querying your data with SQL
-
-
 
 **to be completed**
