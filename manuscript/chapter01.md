@@ -283,14 +283,32 @@ I recommend that you attempt the exercises and challenges at the end of this cha
 
 ## Summary
 
-## Definitions
+TBD
 
-## New `psql` commands
+### Definitions
 
-## New SQL syntax
+TBD
 
-## Exercises
+### New `psql` commands
 
-## Challenges
+TBD
 
-## Food for thought
+### New SQL syntax
+
+TBD
+
+## Continue Learning
+
+TBD
+
+### Exercises
+
+TBD
+
+### Challenges
+
+TBD
+
+### Think About It
+
+TBD
