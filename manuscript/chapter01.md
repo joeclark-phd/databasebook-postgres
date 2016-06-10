@@ -97,7 +97,7 @@ Let's fire up PostgreSQL and create a table.  (I probably won't use the word "re
 
 First, a note about the term "database".  As I have described it above, a database is a system that organizes and stores data and, importantly, makes it available to people who need to search or retrieve it.  Others more precise than I will distinguish between the *database*, which is the organized data store, and the *database management system* (DBMS) which is a program like PostgreSQL that creates the database and grants access to it.  When we call PostgreSQL (or Oracle, or SQL Server, etc.) a database, we are using the term more generally to include both the database and the DBMS, since they go together.
 
-To understand how we interact with PostgreSQL, though, you need a third definition of the term.  In PostgreSQL, a database is a *logical* subdivision of the data store, which in some other systems might be called a *tablespace*.  You may create any number of tables grouped into databases on the same server.  (For the purposes of this book's labs, your personal computer is acting as a PostgreSQL server.)  Table names must be unique within a database, but not within a server.  If several examples in this book include a table called "customers", you can avoid a conflict by creating a new database for each lab.
+To understand how we interact with PostgreSQL, though, you need a third definition of the term.  In PostgreSQL, a database is a *logical* subdivision of the data store.  You may create any number of tables grouped into databases on the same server.  (For the purposes of this book's labs, your personal computer is acting as a PostgreSQL server.)  Table names must be unique within a database, but not within a server.  If several examples in this book include a table called "customers", you can avoid a conflict by creating a new database for each lab.
 
 What we'll do in this first lab, then, is:
 
@@ -287,7 +287,19 @@ TBD
 
 ### Definitions
 
-TBD
+database
+: (in common usage) a system that organizes and stores data and, importantly, makes it available to people and systems that need to search or retrieve it
+: (more precisely) the structured data stored by such a system, which is created and accessed using a database management system (DBMS)
+: (in PostgreSQL) a logical grouping of tables within a PostgreSQL server
+
+database management system (DBMS)
+: a software system used to create, manage, and query a database; PostgreSQL is a notable example
+
+server
+: a software or hardware system that is always on, waiting to respond to requests from users or other systems
+
+database server
+: a database that operates as a server; PostgreSQL acts as a server even when installed on a personal computer
 
 ### New `psql` commands
 
@@ -297,7 +309,7 @@ TBD
 
 TBD
 
-## Continue Learning
+## Skill Builders
 
 TBD
 
