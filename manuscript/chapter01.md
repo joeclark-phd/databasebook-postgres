@@ -293,17 +293,63 @@ database
 : (in PostgreSQL) a logical grouping of tables within a PostgreSQL server
 
 database management system (DBMS)
-: a software system used to create, manage, and query a database; PostgreSQL is a notable example
+: a software system used to create, manage, and query a database
+
+database server
+: a database that operates as a *server*; PostgreSQL acts as a server even when installed on a personal computer
+
+display logic
+: information or code that specifies how data is to be presented to a human user; unlike spreadsheets, database tables do not convey their own display logic
+
+document-oriented database
+: a non-relational database type in which data is logically modeled as collegctions of "documents" with tree-like structures
+
+graph database
+: a non-relational database type in which data is logically modeled as a network diagram (a mathematical graph) with nodes and edges
+
+Postgres
+: nickname for PostgreSQL
+
+PostgreSQL
+: an advanced open-source RDBMS increasingly popular with software developers; freely available at [www.postgresql.org](https://www.postgresql.org)
+
+relation
+: a data "table" that conforms to a few criteria mentioned in the chapter further detailed in Chapter 2
+
+relational database
+: a database in which data is logically structured as a collection of *relations* (i.e. tables) and which conforms (more or less) to the principles proposed in E.F. Codd's 1970 paper "A Relational Model of Data for Large Shared Data Banks"
+
+relational database management system (RDBMS)
+: a DBMS for a relational database; notable examples include PostgreSQL, MySQL, Oracle, SQL Server, DB2, and Access
 
 server
 : a software or hardware system that is always on, waiting to respond to requests from users or other systems
 
-database server
-: a database that operates as a server; PostgreSQL acts as a server even when installed on a personal computer
+SQL
+: the "structured query language", a declarative language for querying an RDBMS; mostly standardized, there are minor differences in the SQL "dialect" used by different database brands
+
+table
+: the commonly term for a *relation* in a database
 
 ### New `psql` commands
 
-TBD
+help
+: display a list of the most basic `psql` commands
+
+\?
+: list all `psql` commands
+
+\h
+: list all SQL commands supported by PostgreSQL
+
+\conninfo
+: report which database you're working in, and which account you're logged in with
+
+\c <database>
+: switch to working in the specified database
+
+\dt
+: list all tables in the current database
 
 ### New SQL syntax
 
