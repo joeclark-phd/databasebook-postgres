@@ -79,15 +79,15 @@ The tables you find in a relational database are properly called relations.  A *
 - Each row must be unique; usually we enforce this by adding a machine-generated ID number to each row.  This column is known as the "primary key" column.
 - No inherent ordering of rows or columns, or other information about how to display the data, is stored in the table.
 
-Consequently, a relation is a simpler and less flexible structure than a table you might create in a spreadsheet program like Microsoft Excel.  Spreadsheets allow you to mix data types, to have rows with different numbers of columns, and to decorate your data with **display logic** like fonts, colors, and sizing.  Figures 1-1 and 1-2 illustrate the comparison.
+Consequently, a relation is a simpler and less flexible structure than a table you might create in a spreadsheet program like Microsoft Excel.  Spreadsheets allow you to mix data types, to have rows with different numbers of columns, and to decorate your data with **display logic** like fonts, colors, and sizing.  Figures 1-1 and 1-2 illustrate the comparison with an example of sales data that might be recorded by a small outdoor sports mail-order business.
 
 ![Figure 1-1: A typical spreadsheet data table](/images/1-1spreadsheet.png)
 
-In the spreadsheet, the user can be flexible with data types, for example inserting the text "NA" in a column that's meant to hold a number.  Data types unanticipated at the time the table was designed could be inserted freely; for example, a Canadian postal code could be inserted into a "zip code" column despite that it is longer than a US zip code and contains letters.  The spreadsheet user can also decorate the data with fonts, styles, sizes and colors in order to make it more readable, and he can add extra information like a "grand total" row.
+In a spreadsheet the user can be lax in data entry, for example omitting the state "TN" when we all know where Nashville is, or entering a quotation mark (meaning "ditto") instead of spelling something out.  Data types unanticipated at the time the table was designed could be inserted freely; for example, a three-letter Canadian province abbreviation could be inserted into a column meant for two-letter US states.  Although these are convenient for data entry, they may lead to problems for computer systems that want to use the data (for example, to print mailing labels).  The spreadsheet user can also decorate the data with fonts, styles, sizes and colors in order to make it more readable, and he can add extra information like a "grand total" row.
 
-As seen in Figure 1-2, a database table (or relation) is much more strictly defined.  Data types must be specified in advance for each column, guaranteeing uniformity.  That means special cases must be anticipated before they occur.  In this example, the database designer specified that "null" values are allowed for Quantity, and any text of up to 10 characters is allowed for a postal code.  In order to guarantee that each row is unique, and therefore can be looked up, we add a primary key column and populate it with an auto-generated ID number.
+As seen in Figure 1-2, a database table (or relation) is much more strictly defined.  Data types must be specified in advance for each column, guaranteeing uniformity.  That means special cases must be anticipated before they occur.  In this example, the database designer specified that state abbreviations must be exactly two characters, and that the price may be `numeric` (allowing fractions) rather than `integer`.  In order to guarantee that each row is unique, and therefore can be looked up, the databsae users has added a primary key column and populate it with an auto-generated ID number.
 
-![Figure 1-2: The same table as it would exist in a database](/images/1-2relation.png)
+![Figure 1-2: The same table as it would exist in a relational database](/images/1-2relation.png)
 
 No other information is found in the rows of a relation except the data itself: not fonts and styles, and not even the sort order.  Totals, averages, and the like wouldn't be stored in the table either, because rows correspond only to individual data "records".  Aggregated values like totals and averages could be calculated in a query or perhaps stored in additional tables created specifically for the purpose.
 
@@ -143,7 +143,7 @@ The change in the command prompt means you're in a different environment.  Here,
 By default, when you start `psql` you're connecting to the default database, which like the superuser is called "postgres".  Any SQL commands you enter at the prompt will be executed on that database's tables, which isn't what you want.  To switch over to the new database you created, use the `\c` command:
 
     postgres=# \c lab1
-    YOu are now connected to database "lab1" as user "postgres".
+    You are now connected to database "lab1" as user "postgres".
     lab1=#
     
 Notice that the prompt changes to tell you which database you're working in.  
@@ -159,15 +159,15 @@ To create a table in the "lab1" database, we use the aptly-named SQL [`CREATE TA
 
 As I mentioned, one of the special characteristics of a relation is that each column allows data only of a specified type.  PostgreSQL offers a number of built-in data types, such as `numeric`, `text`, `date`, and more.  I will discuss the choice of data type more in Chapters 2 and 8, but it need not delay an introductory example.  There are many optional clauses available in the `CREATE TABLE` statement which can be discussed later or looked up in the documentation; the only one we need now is `PRIMARY KEY`, a flag which indicates that a particular column is going to contain unique values that may be used to look up specific rows later.
 
-The command to create our table of Purchases is as follows.  You may type this in at the `psql` prompt, even if it spans several lines.  The code won't execute until the semicolon (`;`) is reached.  Mind the cases: in PostgreSQL the SQL keywords (i.e. `CREATE TABLE`, `PRIMARY KEY`, and the data types) may be uppercase or lowercase, but you should only use lower case letters and underscores (`_`) for the table and column names.
+The command to create our table of Purchases is as follows.  You may type this in at the `psql` prompt, even if it spans several lines.  The code won't execute until the semicolon (`;`) is reached.  Mind the cases: in PostgreSQL the SQL keywords (i.e. `CREATE TABLE`, `PRIMARY KEY`, and the data types) may be uppercase or lowercase, but you should only use lower case letters and underscores (`_`) for the table and column names.  PostgreSQL isn't very sensitive to whitespace, so you can enter this code all on one line, or spread out over several lines, with indentation and tabs if you want them.
 
     CREATE TABLE purchases (
     order_id integer PRIMARY KEY,
-    customer_name text,
-    zipcode text,
+    city text,
+    state char(2),
     product text,
-    quantity integer,
-    order_total numeric );
+    category text,
+    price numeric );
     
 If the command succeeded, you'll see "`CREATE TABLE`" in the output.  If there's an error message instead, don't worry, just try again.  The most likely causes of errors are typos in the data types, the wrong number of commas, and uppercase letters in the table or column names.  If the command worked but you defined the table incorrectly, the easiest solution is to start over by issuing the command `DROP TABLE purchases;` and creating the table anew.
 
@@ -183,9 +183,9 @@ You can confirm that the table exists with the `psql` command `\dt`, which displ
 That's all there is to defining a table, at least an empty one.  In order for us to demonstrate some SQL queries, though, we'll need to store some data in the table with the SQL [`INSERT`](https://www.postgresql.org/docs/9.5/static/sql-insert.html) command.  We'll use the simplest form of this command, adding only one row at a time to the table, for example:
 
     INSERT INTO purchases VALUES
-    (1001, 'Clark', '85226', 'Block Plane', 1, 225.00);
+    (1001, 'Nashville', 'TN', 'Sea Kayak', 'Boating', 449);
 
-Take note that text data must be wrapped in quotation marks (`'`), and numbers must not.  Recall that the zip code column is defined as a text column in this case.  (Can you figure out why that might be?)
+Take note that text data must be wrapped in quotation marks (`'`), and numbers must not.
 
 Writing `INSERT` commands by hand will quickly become tiresome, and is not the usual mode of entering data into a real database.  Typically the database will support software (such as a web app, or an enterprise system) that generates data insertion and update commands automatically.  Another way we might load a lot of data quickly is to read in a file containing (presumably machine-generated) `INSERT` commands.  In `psql` you can execute SQL commands from a file using the `\i` command.
 
@@ -201,4 +201,96 @@ Regardless of how you insert data into the table, please add at least several re
 
 #### Querying your data with SQL
 
-**to be completed**
+SQL is the **structured query language** more or less common to all relational databases, and it really shines for its ability to extract just the data you want from a table or group of tables.  What kinds of queries might you want to make of this data?  You might want specific subsets of the data, such as all the orders for a particular product or in a particular state.  Or you might want to aggregate the data, that is, sum or count or average them, perhaps in groups.  Even with one simple table, there are quite a few ways to query it.
+
+Let's start with the basics.  Your first query is the simplest: it just requests *all* the data.
+
+    SELECT * FROM purchases;
+    
+That's quite a lot of rows, so I'll give you a trick to shorten the results.  Affix "LIMIT <number>" to the end of the query to get only the first several rows:
+
+    SELECT * FROM purchases
+    LIMIT 10;
+    
+The meaning of the "`*`" is "all columns".  It's possible to request only certain columns, for example, let's say you only want to know the cities and states that your customers are ordering from.  Specify the desired columns in the "SELECT" clause:
+
+    SELECT city, state
+    FROM purchases
+    LIMIT 10;
+
+Most of the time you don't want every row, but want to select a subset of the data.  This is accomplished with the "WHERE" clause of a query.  You may request a single row by its primary key, for example:
+
+    SELECT *
+    FROM purchases
+    WHERE order_id = 1011;
+    
+Or you may give criteria that qualify more than one row, if you want to see a specific subset.  For example:
+
+    SELECT *
+    FROM purchases
+    WHERE state='ME';
+    
+The criteria don't have to be "equality" conditions, by the way.  We can also use numerical inequalities; any row for which the inequality is "true" will be returned:
+
+    SELECT city, state, product
+    FROM purchases
+    WHERE price > 500;
+    
+Another condition you might use, for a primitive text search, is "LIKE".  The "`%`" character is a wildcard that matches any text.  Thus, the following code returns all data where the product name *ends* in "Kayak" but would not return data where there was additional text *after* that word.
+
+    SELECT city, state, product
+    FROM purchases
+    WHERE product LIKE '%Kayak';
+    
+#### Aggregate queries
+
+The queries above allow you to carve out subsets of the data by requesting only certain columns, certain rows, or both.  In every example, though, the rows you get in the result are rows from the original table.  Aggregate queries are those that generate data by combining the original rows via an **aggregation function**, usually `SUM`, `COUNT`, or `AVERAGE`.  Obviously the sum of two rows is one row, and is not identical to either of the original rows.  The following query gives you the total dollar amount of all purchases in the table:
+
+    SELECT SUM(price)
+    FROM purchases;
+
+No matter how many rows were in the original table, the query above returns just one row.  Say... how many rows *are* in the original table?
+
+    SELECT COUNT(order_id)
+    FROM purchases;
+    
+The `COUNT` function actually counts the number of rows, not the number of unique values.  If you used `COUNT(state)` instead of `COUNT(order_id)` you'd get the same result.  Even if you have five hundred purchases in 50 states, the `COUNT` would be 500, not 50.  Since the parameter given to the `COUNT` function doesn't matter, it's often easier to simply use `COUNT(*)`.
+
+A grand total (or count, or average) is interesting, but a lot of the time what we want to do are compare subtotals (or counts, or averages) for various groupings of the data.  To do this, we introduce a "GROUP BY" clause.  If we want to know how many purchases were made in each of several categories, we can group by the "category" column and count up the rows in each group:
+
+    SELECT category, COUNT(*)
+    FROM purchases
+    GROUP BY category;
+    
+If you want to know which products account for the largest portions of your revenue, you might group by product and sum the order prices.  There are a lot of products, though, so it's helpful to sort the results with an "ORDER BY" clause.  Since the sum is the 2nd column of the result data, that'll be "ORDER BY 2".
+
+    SELECT product, SUM(price)
+    FROM purchases
+    GROUP BY product
+    ORDER BY 2;
+
+To get just the top ten, here's a trick: sort the data in descending ("DESC") order, and "LIMIT" the results to just the first ten rows.
+
+    SELECT product, SUM(price)
+    FROM purchases
+    GROUP BY product
+    ORDER BY 2 DESC
+    LIMIT 10;
+    
+In Chapter 3 and beyond you'll learn a lot more SQL, such as how to create queries that "join" multiple tables, and how to write queries that employ nested sub-queries.  Even in this example, though, you've seen several of the main parts of a `SELECT` query, including the "WHERE", "GROUP BY", and "ORDER BY" clauses, and aggregate queries.  You have begun to see that even a simple one-table database may be queried in several different ways, and that doing this with short SQL queries may be much easier than trying to wrangle the data in Excel.
+
+I recommend that you attempt the exercises and challenges at the end of this chapter to get more practice with the basics of relational databases, SQL, and PostgreSQL specifically.
+
+## Summary
+
+## Definitions
+
+## New `psql` commands
+
+## New SQL syntax
+
+## Exercises
+
+## Challenges
+
+## Food for thought
