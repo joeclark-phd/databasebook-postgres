@@ -302,7 +302,7 @@ display logic
 : information or code that specifies how data is to be presented to a human user; unlike spreadsheets, database tables do not convey their own display logic
 
 document-oriented database
-: a non-relational database type in which data is logically modeled as collegctions of "documents" with tree-like structures
+: a non-relational database type in which data is logically modeled as collections of "documents" with tree-like structures
 
 graph database
 : a non-relational database type in which data is logically modeled as a network diagram (a mathematical graph) with nodes and edges
@@ -336,7 +336,7 @@ table
 help
 : display a list of the most basic `psql` commands
 
-\?
+\\?
 : list all `psql` commands
 
 \h
