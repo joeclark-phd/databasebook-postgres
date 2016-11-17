@@ -85,7 +85,7 @@ Consequently, a relation is a simpler and less flexible structure than a table y
 
 In a spreadsheet the user can be lax in data entry, for example omitting the state "TN" when we all know where Nashville is, or entering a quotation mark (meaning "ditto") instead of spelling something out.  Data types unanticipated at the time the table was designed could be inserted freely; for example, a three-letter Canadian province abbreviation could be inserted into a column meant for two-letter US states.  Although these are convenient for data entry, they may lead to problems for computer systems that want to use the data (for example, to print mailing labels).  The spreadsheet user can also decorate the data with fonts, styles, sizes and colors in order to make it more readable, and he can add extra information like a "grand total" row.
 
-As seen in Figure 1-2, a database table (or relation) is much more strictly defined.  Data types must be specified in advance for each column, guaranteeing uniformity.  That means special cases must be anticipated before they occur.  In this example, the database designer specified that state abbreviations must be exactly two characters, and that the price may be `numeric` (allowing fractions) rather than `integer`.  In order to guarantee that each row is unique, and therefore can be looked up, the databsae users has added a primary key column and populate it with an auto-generated ID number.
+As seen in Figure 1-2, a database table (or relation) is much more strictly defined.  Data types must be specified in advance for each column, guaranteeing uniformity.  That means special cases must be anticipated before they occur.  In this example, the database designer specified that state abbreviations must be exactly two characters, and that the price may be `numeric` (allowing fractions) rather than `integer`.  In order to guarantee that each row is unique, and therefore can be looked up, the database user has added a primary key column and populate it with an auto-generated ID number.
 
 ![Figure 1-2: The same table as it would exist in a relational database](/images/1-2relation.png)
 
@@ -314,7 +314,7 @@ PostgreSQL
 : an advanced open-source RDBMS increasingly popular with software developers; freely available at [www.postgresql.org](https://www.postgresql.org)
 
 relation
-: a data "table" that conforms to a few criteria mentioned in the chapter further detailed in Chapter 2
+: a data "table" that conforms to a few criteria mentioned in this chapter and further detailed in Chapter 2
 
 relational database
 : a database in which data is logically structured as a collection of *relations* (i.e. tables) and which conforms (more or less) to the principles proposed in E.F. Codd's 1970 paper "A Relational Model of Data for Large Shared Data Banks"
@@ -355,18 +355,25 @@ help
 
 TBD
 
-## Skill Builders
+## Challenges
 
-TBD
+1. Look up and read an encyclopedia entry on databases.  Did you learn anything that you think ought to have been included in this chapter?  Email the author or leave feedback on Leanpub!
+2. Find and read the official PostgreSQL documentation on the "CREATE TABLE" command.
+3. What are some of the other rules or constraints you can place on a column?  Name three, and speculate on when they would be useful.
+4. Look up the documentation on data types supported by PostgreSQL.  There are a lot of them.  Make a short list (or a cheat sheet) of the five or six data types you think you'd use most often.
+5. Try to find out on your own how to use the "ALTER TABLE" command to add a new column to an existing table.  Specifically, add a "date" column to the "purchases" table used as an example in this chapter.
+6. PostgreSQL comes with a graphical user interface (GUI) called **pgAdmin III**.  Find this program on your computer and figure out how to log in to your PostgreSQL database(s) with it.
+7. On your own, figure out how to use pgAdmin III to create a new table in the "lab1" database.  Make sure it has a primary key column.  Can you add some sample data to the table without having to use SQL "INSERT" commands?
+8. See if you can find out how to open a window within pgAdmin III to execute arbitrary SQL commands.  Run some of the example SQL queries from this chapter through that interface.
+9. Other graphical front-ends for PostgreSQL (besides pgAdmin III) are available, some free (or free to students) and some commercial.  Find and examine one or two of these alternatives.  What do you think of them?
+10.  It's annoying to have to include "`-U postgres`" every time you want to run `psql` from the command line.  Can you find out how to alter your setup so that this can be omitted?  Note: there are multiple ways to do this, and the best option may differ across Windows, Mac, and Linux systems. 
 
 ### Exercises
 
 TBD
 
-### Challenges
-
-TBD
-
 ### Think About It
 
-TBD
+21. Not all databases are relational.  How might you structure a database *without* using familiar tables, rows, and columns?  What would be the advantages and disadvantages of such a data modeling approach?
+
+22. 
