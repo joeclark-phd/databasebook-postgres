@@ -6,7 +6,7 @@ Why type commands the command line?  Although there are point-and-click graphica
 
 ## Setting up PostgreSQL in Windows 10
 
-### Obtain and install PostgreSQL
+### Obtain and install PostgreSQL 
 
 First, visit [www.postgresql.org](https://www.postgresql.org/) for the latest information about PostgreSQL.  Take note of the latest *stable* version number, which at the time of this writing appears under the heading "LATEST RELEASES".  There will probably also be an announcement about an unfinished future version, in alpha or beta test stage, but I recommend you avoid that one.  From the homepage, follow the "Download" link(s) until you find a Windows installer for the latest version.  At the time of this writing these links take you to the website of EnterpriseDB, a company that promotes PostgreSQL.
 
@@ -56,7 +56,52 @@ Setting the system's PATH has been a stumbling block for many of my students, es
 
 ## Setting up PostgreSQL on a Mac
 
-(to do)
+### Obtain and install PostgreSQL 
+
+The home of PostgreSQL is [www.postgresql.org](https://www.postgresql.org/) and I recommend that you visit it for up-to-date information, although in the case of Mac installation it's not necessary to go there.  Take note of the latest *stable* version number, which at the time of this writing appears under the heading "LATEST RELEASES".  There will probably also be an announcement about an unfinished future version, in alpha or beta test stage, but I recommend you avoid that one.  
+
+For Mac users, there are actually quite a few ways to obtain Postgres, including an installer programs provided by EnterpriseDB, an "app", and the Homebrew package manager.  I've found the Homebrew installation quite painless, and it looks like Homebrew may be a useful utility to me as a developer, so that's what I'm recommending at present.
+
+![Figure A-9: Homewbrew's website http://brew.sh/](/images/A-9homebrew.png)
+
+If you don't have Homebrew yet, visit their website at [brew.sh](http://brew.sh) for instructions.  The easiest way to install Homebrew is to open up a Terminal window and paste the code provided on the web page.  This downloads an installation script and runs it on your computer.
+
+### A note on Mac OS X terminals
+
+If you have never accessed the command line on your Mac, you can do so through the Terminal app.  This can be found through the Finder, under Applications, in the Utilities folder.  Mac OS X is a Unix operating system under the hood, so it shares many of the same commands found on other Unix systems (such as Linux).  Many power users, myself included, find the Terminal app rather limited, and have turned to alternatives available online or through the App Store.  I'm using iTerm2, found at [iterm2.com](https://iterm2.com).
+
+### Installing PostgreSQL with Homebrew
+
+This couldn't be easier.  Assuming you installed Homebrew with no problems, go to a command line and type
+
+    brew install postresql
+
+![Figure A-10: Installing PosgreSQL with Homebrew](/images/A-10macbrewinstall.png)
+
+Upon your hitting ENTER, Homebrew should proceed to download Postgres, install it, and configure it for use.  You will see a number of messages scrolling by (see for example, Figure A-11) and a new prompt will appear when installation is complete.
+
+![Figure A-11: A successful installation using Homebrew](/images/A-11macbrewmessages.png)
+
+### Starting the server and creating a database
+
+You can test that you installed the software by entering `psql -V` at the command line.  The system should respond by telling you the version of Postgres that you installed.  (Tip: if this fails, try closing the Terminal window and opening a new one, then re-enter the command.)
+
+![Figure A-12: `psql` works, so the software was installed right.](/images/A-12psql-v.png)
+
+On the Mac, though, there are a couple of additional things to do.  Remember that `psql` is just a utility for talking to the database; for it to be useful we must first start the database.  As you might have seen in the messages output by the installation, we can start the server with a Homebrew command like this:
+
+    brew services start postgresql
+
+The PostgreSQL server is now running in the background on your computer, and it will keep running even if you restart the computer later.  To stop this background server, you can enter the "stop" command at any time:
+
+    brew services stop postgresql
+
+There's one last thing to do now.  By default, if you simply enter `psql` at the command line, Postgres tries to open a database with the same name as your Mac OS username.  Since that database doesn't exist yet, it will fail.  The simple solution is to use `createdb <username>` (see Chapter 1) to create the database it's looking for.  Figure A-13 illustrates the error messages you may encounter, and the steps needed to successfully start the server and create the default database.
+
+![Figure A-13: Starting the server and creating the default database](/images/A-13macstartcreatedb.png)
+
+Now your Mac should be ready to play with all the examples in this book.
+
 
 ## Setting up PostgreSQL in Linux
 
