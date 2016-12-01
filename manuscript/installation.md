@@ -58,21 +58,17 @@ Setting the system's PATH has been a stumbling block for many of my students, es
 
 ### Obtain and install PostgreSQL 
 
-The home of PostgreSQL is [www.postgresql.org](https://www.postgresql.org/) and I recommend that you visit it for up-to-date information, although in the case of Mac installation it's not necessary to go there.  Take note of the latest *stable* version number, which at the time of this writing appears under the heading "LATEST RELEASES".  There will probably also be an announcement about an unfinished future version, in alpha or beta test stage, but I recommend you avoid that one.  
+The home of PostgreSQL is [www.postgresql.org](https://www.postgresql.org/) and, although it's not necessary to go there to obtain Postgres for the Mac,I recommend that you make a visit to that website as your first step anyway.  There you can learn about the latest version, locate documentation and other resources, and find the latest information about installation, if this book is out of date by the time you read it.  Take note of the latest *stable* version number, which at the time of this writing appears under the heading "LATEST RELEASES".  There will probably also be an announcement about an unfinished future version, in alpha or beta test stage, but I recommend you avoid that one.  
 
-For Mac users, there are actually quite a few ways to obtain Postgres, including an installer programs provided by EnterpriseDB, an "app", and the Homebrew package manager.  I've found the Homebrew installation quite painless, and it looks like Homebrew may be a useful utility to me as a developer, so that's what I'm recommending at present.
+For Mac users, there are actually quite a few ways to obtain Postgres, including an installer program provided by EnterpriseDB, an "app", and the Homebrew package manager.  I've found the Homebrew installation quite painless, and it looks like Homebrew may have other handy uses (such as starting and stopping the database server), so that's the approach I recommend for you.
 
 ![Figure A-9: Homewbrew's website http://brew.sh/](/images/A-9homebrew.png)
 
 If you don't have Homebrew yet, visit their website at [brew.sh](http://brew.sh) for instructions.  The easiest way to install Homebrew is to open up a Terminal window and paste the code provided on the web page.  This downloads an installation script and runs it on your computer.
 
-### A note on Mac OS X terminals
+A> If you have never accessed the command line on your Mac, you can do so through the Terminal app.  This can be found through the Finder, under Applications, in the Utilities folder.  Mac OS X is a Unix operating system under the hood, so it shares many of the same commands found on other Unix systems (such as Linux).  Many power users, myself included, find the Terminal app rather limited, and have turned to alternatives available online or through the App Store.  I'm using iTerm2, found at [iterm2.com](https://iterm2.com).
 
-If you have never accessed the command line on your Mac, you can do so through the Terminal app.  This can be found through the Finder, under Applications, in the Utilities folder.  Mac OS X is a Unix operating system under the hood, so it shares many of the same commands found on other Unix systems (such as Linux).  Many power users, myself included, find the Terminal app rather limited, and have turned to alternatives available online or through the App Store.  I'm using iTerm2, found at [iterm2.com](https://iterm2.com).
-
-### Installing PostgreSQL with Homebrew
-
-This couldn't be easier.  Assuming you installed Homebrew with no problems, go to a command line and type
+Installing Postgres with Homebrew couldn't be easier.  Assuming you have installed Homebrew, go to a command line and type
 
     brew install postresql
 
