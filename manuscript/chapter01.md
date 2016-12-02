@@ -44,11 +44,11 @@ A> If your goal is simply to learn SQL or relational data modeling, though, SQLi
 
 ### What you'll learn from this book
 
-This book will introduce you to **relational databases**, with data modeling and SQL first and foremost.  It covers the scope of a typical first database course in an information systems or analytics program at the university level.  It can be used as a textbook for an instructor-led course---instructors, please contact the author for an instructor's guide, slides and materials--or used for self-guided study with or without the video lectures produced by the author (coming soon via Leanpub).
+This book will introduce you to **relational databases**, with data modeling and SQL first and foremost.  It covers the scope of a typical first database course in an information systems or analytics program at the university level.  It can be used as a textbook for an instructor-led course---instructors, please contact the author for an instructor's guide, slides and materials---or used for self-guided study with or without the video lectures produced by the author (coming soon via Leanpub).
 
 My main goal in creating this book is to make data modeling and SQL understandable to the reader, so it may serve as a good low-cost supplement for students who are struggling with a theory-heavy textbook and having a hard time getting the point.  Instead of starting with loads of theory up-front, I'll take a more pragmatic approach based on relational data modeling "patterns" and examples.  
 
-This book will also provide a lot of practice using SQL, the structured query language common to all relational databases, because the most frequent feedback I've heard from my students at Arizona State (and from companies that hire them) is that they need more practice with SQL.
+This book will also provide a lot of practice using SQL, the structured query language common to all relational databases, because the most frequent feedback I've heard from my undergraduate students (and from companies that hire them) is that they need more practice with SQL.
 
 The database of choice for this book is PostgreSQL (often nicknamed "Postgres"), an open-source database that has become quite popular with developers in recent years.  Compared to some other popular databases like SQL Server and MySQL, there aren't many good books about Postgres, so I hope this book will be valuable if only for its examples.  Postgres makes a good choice for teaching because it is free software (both "free as in free speech" and "free as in free beer"), and because it runs on all the major platforms---Windows, Mac OS, and Linux---so you can follow this book no matter what kind of computer you have handy.
 
@@ -72,14 +72,14 @@ To quit `psql`, enter `\q` at the prompt.  If the above doesn't make any sense t
 
 ### Relations are tables
 
-Databases can be classified according to the types of abstractions they allow you to model your data with.  In a relational database, data is modeled as a set of tables with structured rows and columns.  Other data models are possible.  In a **document-oriented database** such as MongoDB, data is modeled as documents with tree-like structures.  In a **graph database** like Neo4J, data is structured as a network diagram (a mathematical graph) with nodes and edges.  Compared to those newer forms, the relational model is far more commonly seen and better understood, and is the most versatile.  Relational databases have been tried and tested in business for nearly four decades, and are probably the best tool for the job in all but a few specialized cases.
+Databases can be classified according to the types of abstractions they allow you to model your data with.  In a relational database, data is modeled as a set of tables with structured rows and columns.  Other data models are possible.  In a **document-oriented database** such as MongoDB, data is modeled as documents with tree-like structures.  In a **graph database** like Neo4J, data is structured as a network (a mathematical graph) with nodes and edges.  Compared to those newer forms, the relational model is far more commonly seen and better understood, and is the most versatile.  Relational databases have been tried and tested in business for nearly four decades, and are probably the best tool for the job in all but a few specialized cases.
 
 The tables you find in a relational database are properly called relations.  A **relation** is not just any table; it is a construct found in set theory and is defined by the following characteristics:
 
 - Every row has the same columns.
 - Column names must all be different.
 - Each column is defined to contain just one specific type of data.
-- Each row must be unique; usually we enforce this by adding a machine-generated ID number to each row.  This column is known as the "primary key" column.
+- Each row must be unique; usually we enforce this by adding a machine-generated ID number to each row, known as the "primary key" column.
 - No inherent ordering of rows or columns, or other information about how to display the data, is stored in the table.
 
 Consequently, a relation is a simpler and less flexible structure than a table you might create in a spreadsheet program like Microsoft Excel.  Spreadsheets allow you to mix data types, to have rows with different numbers of columns, and to decorate your data with **display logic** like fonts, colors, and sizing.  Figures 1-1 and 1-2 illustrate the comparison with an example of sales data that might be recorded by a small outdoor sports mail-order business.
@@ -88,7 +88,7 @@ Consequently, a relation is a simpler and less flexible structure than a table y
 
 In a spreadsheet the user can be lax in data entry, for example omitting the state "TN" when we all know where Nashville is, or entering a quotation mark (meaning "ditto") instead of spelling something out.  Data types unanticipated at the time the table was designed could be inserted freely; for example, a three-letter Canadian province abbreviation could be inserted into a column meant for two-letter US states.  Although these are convenient for data entry, they may lead to problems for computer systems that want to use the data (for example, to print mailing labels).  The spreadsheet user can also decorate the data with fonts, styles, sizes and colors in order to make it more readable, and he can add extra information like a "grand total" row.
 
-As seen in Figure 1-2, a database table (or relation) is much more strictly defined.  Data types must be specified in advance for each column, guaranteeing uniformity.  That means special cases must be anticipated before they occur.  In this example, the database designer specified that state abbreviations must be exactly two characters, and that the price may be `numeric` (allowing fractions) rather than `integer`.  In order to guarantee that each row is unique, and therefore can be looked up, the database user has added a primary key column and populate it with an auto-generated ID number.
+As seen in Figure 1-2, a database table (or relation) is much more strictly defined.  Data types must be specified in advance for each column, guaranteeing uniformity.  That means special cases must be anticipated before they occur.  In this example, the database designer specified that state abbreviations must be exactly two characters, and that the price may be `numeric` (allowing fractions) rather than `integer`.  In order to guarantee that each row is unique, and therefore can be looked up, the database user has added a primary key column and populated it with an auto-generated ID number.
 
 ![Figure 1-2: The same table as it would exist in a relational database](/images/1-2relation.png)
 
@@ -98,7 +98,7 @@ No other information is found in the rows of a relation except the data itself: 
 
 Let's fire up PostgreSQL and create a table.  (I probably won't use the word "relation" much after this, except for a bit of theory in Chapter 2.  Where I write "table", you should be able to figure out what I mean.)
 
-First, a note about the term "database".  As I have described it above, a database is a system that organizes and stores data and, importantly, makes it available to people who need to search or retrieve it.  Others more precise than I will distinguish between the *database*, which is the organized data store, and the *database management system* (DBMS) which is a program like PostgreSQL that creates the database and grants access to it.  When we call PostgreSQL (or Oracle, or SQL Server, etc.) a database, we are using the term more generally to include both the database and the DBMS, since they go together.
+First, a note about the term "database".  As I have described it above, a database is a system that organizes and stores data and, importantly, makes it available to people who need to search or retrieve it.  Others more precise than I will distinguish between the *database*, which is the organized data store, and the *database management system* (DBMS) which is a program like PostgreSQL that creates the data store and grants us access to it.  When we call PostgreSQL (or Oracle, or SQL Server, etc.) a database, we are using the term more generally to include both the data store and the DBMS, since they go together.
 
 To understand how we interact with PostgreSQL, though, you need a third definition of the term.  In PostgreSQL, a database is a *logical* subdivision of the data store.  You may create any number of tables grouped into databases on the same server.  (For the purposes of this book's labs, your personal computer is acting as a PostgreSQL server.)  Table names must be unique within a database, but not within a server.  If several examples in this book include a table called "customers", you can avoid a conflict by creating a new database for each lab.
 
@@ -141,7 +141,7 @@ The change in the command prompt means you're in a different environment.  Here,
            \g or terminate with semicolon to execute query
            \q to quit
        
-By default, when you start `psql` you're connecting to the database with the same name as  your PostgreSQL username.  For those of you on Windows users, if you followed my installation instructions (in Appendix A) that will be "postgres".  For Mac and Linux users, the default database will be named the same as your computer login name, hence "joeclark" in the code samples above.  Any SQL commands you enter at the prompt will be executed on the default database's tables, and that isn't what we want.  To switch over to the new database you created, use the `\c` command:
+By default, when you start `psql` you're connecting to the database with the same name as  your PostgreSQL username.  For those of you on Windows, if you followed my installation instructions (in Appendix A), that will be "postgres".  For Mac and Linux users, the default database will be named the same as your computer login name, hence my username "joeclark" appears in the code samples above.  Any SQL commands you enter at the prompt will be executed on the default database's tables, and that isn't what we want.  To switch over to the new database you created, use the `\c` command:
 
     joeclark=# \c lab1
     You are now connected to database "lab1" as user "joeclark".
@@ -178,7 +178,7 @@ You can confirm that the table exists with the `psql` command `\dt`, which displ
                List of relations
      Schema |   Name    | Type  |  Owner   
     ---------------------------------------
-     public | purchases | table | postgres
+     public | purchases | table | joeclark
      (1 row)
 
 That's all there is to defining a table, at least an empty one.  In order for us to demonstrate some SQL queries, though, we'll need to store some data in the table with the SQL [`INSERT`](https://www.postgresql.org/docs/9.5/static/sql-insert.html) command.  We'll use the simplest form of this command, adding only one row at a time to the table, for example:
@@ -288,6 +288,9 @@ TBD
 
 ### Definitions
 
+black box
+: a term sometimes used to hypothesize a device by describing *what it would do* without addressing how it might actually work
+
 database
 : (in common usage) a system that organizes and stores data and, importantly, makes it available to people and systems that need to search or retrieve it
 : (more precisely) the structured data stored by such a system, which is created and accessed using a database management system (DBMS)
@@ -308,11 +311,18 @@ document-oriented database
 graph database
 : a non-relational database type in which data is logically modeled as a network diagram (a mathematical graph) with nodes and edges
 
+metadata
+: information about data's structure and meaning; examples include column names and data types
+
 Postgres
 : nickname for PostgreSQL
 
 PostgreSQL
 : an advanced open-source RDBMS increasingly popular with software developers; freely available at [www.postgresql.org](https://www.postgresql.org)
+
+query
+: (v) to request specified data from a database
+: (n) a specification in code (e.g. SQL) of a request for data from a database
 
 relation
 : a data "table" that conforms to a few criteria mentioned in this chapter and further detailed in Chapter 2
