@@ -1,8 +1,8 @@
 # Appendix A: Installing PostgreSQL and accessing it from the command line
 
-In this chapter, I'll walk you through installing the latest version of PostgreSQL on Windows 10, Mac OS X, and select Linux distributions.  As stated in Chapter 1, the goal is to get to the point that you can enter the command `psql -V` at your system's command line, and the system responds by telling you the version of PostgreSQL installed.
+In this chapter, I'll walk you through installing the latest version of PostgreSQL on Windows 10, Mac OS X, and select Linux distributions.  As stated in Chapter 1, the goal is to get to the point that you can enter the command `psql` at your system's command line and connect to a PostgreSQL server running in your local environment.
 
-Why type commands the command line?  Although there are point-and-click graphical interfaces available for PostgreSQL, it is difficult for me to give clear instructions about how to point and where to click.  These interfaces may also be different for users on different platforms.  The command line interface (CLI) to PostgreSQL is the same for all platforms and allows me to give precise instructions.  It will also ensure that you get lots of practice writing SQL.  As a bonus feature, non-technical people who see you doing this will think you're a super-hacker.
+Why type commands the command line?  Although there are point-and-click graphical interfaces available for PostgreSQL, it is difficult for me or any teacher to give clear instructions about how to point and where to click.  These interfaces may also be different for users on different platforms.  The command line interface (CLI) to PostgreSQL is the same for all platforms and allows me to give precise instructions.  It will also ensure that you get lots of practice writing SQL.  As a bonus feature, non-technical people who see you doing this will think you're a super-hacker.
 
 ## Setting up PostgreSQL in Windows 10
 

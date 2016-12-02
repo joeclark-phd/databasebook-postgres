@@ -60,12 +60,15 @@ A> If this book finds any significant success with readers, I fully intend to cr
 
 ### Up and running with Postgres
 
-PostgreSQL is available for free at [www.postgresql.org](https://www.postgresql.org) and is extremely well documented there.  Installation instructions will vary depending on your platform, and should be pretty straightforward.  You can probably accept all the default configuration options. Be sure to remember the password you set during installation.  You're up and running when you can enter the command `psql -V` at your system's command line, and the system responds by telling you the version of PostgreSQL installed.  At the time of this writing, it looks like this for me:
+PostgreSQL is available for free at [www.postgresql.org](https://www.postgresql.org) and is extremely well documented there.  Installation instructions will vary depending on your platform, and should be pretty straightforward.  You can probably accept all the default configuration options. Be sure to remember the password you set during installation.  You're up and running when you can enter the command `psql` at your system's command line to log in to the local PostgreSQL server.  You will recognize this by a readout of the `psql` version number, a statement about how to get help, and a change to the command prompt.  At the time of this writing, it looks like this for me (on my Mac):
 
-    $ psql -V
-    psql (PostgreSQL) 9.5.3
-    
-If that doesn't make any sense to you, see Appendix A for my detailed guide to installing Postgres on Windows, Mac, and Linux, or refer to the online [documentation](https://www.postgresql.org/docs/).
+    $ psql
+    psql (9.6.1)
+    Type "help" for help.
+
+    joeclark=#
+
+To quit `psql`, enter `\q` at the prompt.  If the above doesn't make any sense to you, don't worry.  Appendix A to this book includes my own tested instructions for installing Postgres on Windows, Mac, and Linux.  You can also refer to the [online documentation](https://www.postgresql.org/docs/). Come back to this page when you're up and running.
 
 ### Relations are tables
 
@@ -108,31 +111,29 @@ What we'll do in this first lab, then, is:
 
 #### Database creation
 
-You can create a database from your operating system's command line (i.e., before logging in to PostgreSQL with `psql` or another front-end tool), by using the command `createdb`.  The basic structure of this command is `createdb [OPTIONS] [DBNAME]`, and you can learn more by typing `createdb --help` at the command prompt.  The only optional parameter you need to specify is the identity of the database "user" that was created when you installed PostgreSQL.  The user "postgres" is the superuser who has power to make any and all changes to the server, including creating databases.  Thus, the following command creates a database called "lab1":
+You can create a database from your operating system's command line (i.e., before logging in to PostgreSQL with `psql` or another front-end tool), by using the command `createdb`.  The basic structure of this command is `createdb [OPTIONS] [DBNAME]`, and you can learn more by typing `createdb --help` at the command prompt.  Thus, the following command creates a database called "lab1":
 
-    $ createdb -U postgres lab1
-
-If you did not specify a username with the `-U` parameter, `createdb` tries to log in to PostgreSQL with your computer account's username (in my case, "Joseph"). If I have set up such an account, `createdb lab1` would work.  But since I haven't, it fails.  One of the Challenges offered at the end of this chapter is to find out how to create a user account to make these commands less verbose.
+    $ createdb lab1
 
 If necessary, you can also drop (i.e., delete) the new database from the commmand line, with:
 
-    $ dropdb -U postgres lab1
+    $ dropdb lab1
     
-For future reference, you can alse create and delete databases using SQL once you're logged in to `psql`: the CREATE DATABASE and DROP DATABASE commands, respectively.  One way or another, create that database, which will be home to your first table.
+For future reference, you can also create and delete databases using SQL once you're logged in to `psql`: the CREATE DATABASE and DROP DATABASE commands, respectively.  One way or another, create that database, which will be home to your first table.
     
 #### Introducing `psql`
 
-The command-line client for PostgreSQL is `psql`, and like `createdb`, it needs to know the username you want to connect with.  Connect with `psql -U postgres`.  This will not open a new window, but rather you will see a brief welcome and the command prompt will be different from the operating system's default prompt.
+The command-line client for PostgreSQL is `psql`, and you launch it by entering `psql` on the command line.  This will not open a new window, but rather you will see a brief welcome and the command prompt will be different from the operating system's default prompt.
 
     $ psql -U postgres
-    psql (9.5.3)
+    psql (9.6.1)
     Type "help" for help.
 
-    postgres=#
+    joeclark=#
 
 The change in the command prompt means you're in a different environment.  Here, you can enter SQL queries or some commands specific to `psql`.  The first thing I'd recommend you do is type `help`, which introduces you to a few of the latter.  Most `psql` commands begin with a backslash (\\) and you can get a full listing of them by entering the command `\?`.  If you need to quit, `\q` is the command for that.  If you want to, take some time now to explore the lists of SQL queries and `psql` commands possible.
 
-    postgres=# help
+    joeclark=# help
     You are using psql, the command-line interface to PostgreSQL.
     Type:  \copyright for distribution terms
            \h for help with SQL commands
@@ -140,10 +141,10 @@ The change in the command prompt means you're in a different environment.  Here,
            \g or terminate with semicolon to execute query
            \q to quit
        
-By default, when you start `psql` you're connecting to the default database, which like the superuser is called "postgres".  Any SQL commands you enter at the prompt will be executed on that database's tables, which isn't what you want.  To switch over to the new database you created, use the `\c` command:
+By default, when you start `psql` you're connecting to the database with the same name as  your PostgreSQL username.  For those of you on Windows users, if you followed my installation instructions (in Appendix A) that will be "postgres".  For Mac and Linux users, the default database will be named the same as your computer login name, hence "joeclark" in the code samples above.  Any SQL commands you enter at the prompt will be executed on the default database's tables, and that isn't what we want.  To switch over to the new database you created, use the `\c` command:
 
-    postgres=# \c lab1
-    You are now connected to database "lab1" as user "postgres".
+    joeclark=# \c lab1
+    You are now connected to database "lab1" as user "joeclark".
     lab1=#
     
 Notice that the prompt changes to tell you which database you're working in.  
@@ -189,7 +190,7 @@ Take note that text data must be wrapped in quotation marks (`'`), and numbers m
 
 Writing `INSERT` commands by hand will quickly become tiresome, and is not the usual mode of entering data into a real database.  Typically the database will support software (such as a web app, or an enterprise system) that generates data insertion and update commands automatically.  Another way we might load a lot of data quickly is to read in a file containing (presumably machine-generated) `INSERT` commands.  In `psql` you can execute SQL commands from a file using the `\i` command.
 
-I have provided a script file containing 100 lines of purchase data on the GitHub repository that supports this book.  You may find the file `purchases.txt` at https://github.com/joeclark-phd/databasebook-postgres, in the "psql_scripts" folder.  I have downloaded this file to my computer, a Windows laptop, and saved it in the directory `C:/psql_scripts`, so for me the command looks like this:
+I have provided a script file containing 100 lines of purchase data on the GitHub repository that supports this book.  You may find the file `purchases.txt` at https://github.com/joeclark-phd/databasebook-postgres, in the "psql_scripts" folder.  If I have downloaded this file to a Windows laptop and saved it in the directory `C:/psql_scripts`, the command looks like this:
 
     lab1=# \i c:/psql_scripts/purchases.sql
     INSERT 0 1
@@ -362,11 +363,10 @@ TBD
 3. What are some of the other rules or constraints you can place on a column?  Name three, and speculate on when they would be useful.
 4. Look up the documentation on data types supported by PostgreSQL.  There are a lot of them.  Make a short list (or a cheat sheet) of the five or six data types you think you'd use most often.
 5. Try to find out on your own how to use the "ALTER TABLE" command to add a new column to an existing table.  Specifically, add a "date" column to the "purchases" table used as an example in this chapter.
-6. PostgreSQL comes with a graphical user interface (GUI) called **pgAdmin III**.  Find this program on your computer and figure out how to log in to your PostgreSQL database(s) with it.
-7. On your own, figure out how to use pgAdmin III to create a new table in the "lab1" database.  Make sure it has a primary key column.  Can you add some sample data to the table without having to use SQL "INSERT" commands?
-8. See if you can find out how to open a window within pgAdmin III to execute arbitrary SQL commands.  Run some of the example SQL queries from this chapter through that interface.
-9. Other graphical front-ends for PostgreSQL (besides pgAdmin III) are available, some free (or free to students) and some commercial.  Find and examine one or two of these alternatives.  What do you think of them?
-10.  It's annoying to have to include "`-U postgres`" every time you want to run `psql` from the command line.  Can you find out how to alter your setup so that this can be omitted?  Note: there are multiple ways to do this, and the best option may differ across Windows, Mac, and Linux systems. 
+6. PostgreSQL offers a graphical user interface (GUI) called **pgAdmin**, which may have been installed with it.  Find this program on your computer or install it, and figure out how to log in to your PostgreSQL database(s) with it.
+7. On your own, figure out how to use pgAdmin to create a new table in the "lab1" database.  Make sure it has a primary key column.  Can you add some sample data to the table without having to use SQL "INSERT" commands?
+8. See if you can find out how to open a window within pgAdmin to execute arbitrary SQL commands.  Run some of the example SQL queries from this chapter through that interface.
+9. Other graphical front-ends for PostgreSQL (besides pgAdmin) are available, some free (or free to students) and some commercial.  Find and examine one or two of these alternatives.  What do you think of them?
 
 ### Exercises
 
@@ -374,6 +374,5 @@ TBD
 
 ### Think About It
 
-21. Not all databases are relational.  How might you structure a database *without* using familiar tables, rows, and columns?  What would be the advantages and disadvantages of such a data modeling approach?
+20. Not all databases are relational.  How might you structure a database *without* using familiar tables, rows, and columns?  What would be the advantages and disadvantages of such a data modeling approach?
 
-22. 
