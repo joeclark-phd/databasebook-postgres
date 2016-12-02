@@ -54,7 +54,7 @@ In the environment variable control panel (see Figure A-6), you'll see a list of
 
 Click 'OK'.  You may now open a new command prompt and try `psql` again, and you'll most likely get the confusing error illustrated in figure A-8.  The program will ask you for the password--the same password you dutifully wrote down during installation (see above)--and then will tell you that "authentication failed for user YourName".  What this means is not that you got the password wrong, but that Postgres got the username wrong.  It assumed your database username was the same as your Windows username.  Glancing back up at figure A-2, you'll see that the database user is simply named "postgres".
 
-![Figure A-8: This error means that PostgreSQL guessed the username wrong.]
+![Figure A-8: This error means that PostgreSQL guessed the username wrong.](/images/A-8authfailed.png)
 
 There's a workaround for this problem: you can append "`-U postgres`" to all database commands to specify the username, e.g.:
 
