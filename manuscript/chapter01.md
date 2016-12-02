@@ -289,7 +289,7 @@ TBD
 ### Definitions
 
 black box
-: a term sometimes used to hypothesize a device by describing *what it would do* without addressing how it might actually work
+: a term sometimes used to hypothesize a device by describing what it would *do* without addressing how it might actually work
 
 database
 : (in common usage) a system that organizes and stores data and, importantly, makes it available to people and systems that need to search or retrieve it
