@@ -14,7 +14,7 @@ In this example, it would be very easy to query the database for a list of movie
 
 The problem is, as databases grow, you will *always* find that you want to make queries you didn't anticipate at the time you created the database.  Codd, a researcher at IBM, had this problem in mind when in a 1970 he published ["A Relational Model of Data Storage"](https://doi.org/10.1145/362384.362685).
 
-![Figure 2-2. Edgar F. Codd](/images/2-2codd.png)
+![Figure 2-2. Edgar F. Codd](/images/2-2codd.jpg)
 
 In the relational model, the database consists of a set of tables, one for each  **entity** (or noun) described by data.  Each table can be queried on its own, or related tables can be combined into one query, but there is no "parent" table and no network or hierarchy that must be traversed.  You have already seen a glimpse of this in Chapter 1; now, let's define the terms a bit more precisely.
 
@@ -260,7 +260,7 @@ The relational data model is one of several data modeling paradigms used by data
 
 ![Figure 2-16. Symbols in the crow's foot notation for E-R diagrams](/images/2-16crowsfootnotation.png)
 
-# Lab 2: Creating and querying a relational database
+## Lab 2: Creating and querying a relational database
 
 In Lab 1 you created a one-table database and were introduced to some of the basic things you can do with SQL queries.  Now that you have learned the basics of how multiple tables can be related to one another within a relational database, you will want to see some richer and more realistic examples.  Moreover, you'll need to familiarize yourself with the main way that tables are queried *together*: the SQL **join**.
 
@@ -512,7 +512,7 @@ Tables are joined using the `FROM` clause.  Instead of identifying one table, we
      Warner Bros | Ratatouille
     (15 rows)
  
- Clearly, of course, most of these combinations don't make any sense.  *The Incredibles* is a Disney picture, so there's no circumstance where you'd want a row matching it up with Paramount or Warner Bros.  Recall from Chapter 1's lab that the `WHERE` clause allows us to filter the rows of a result.  What you'd want to do now is to keep only those matchups where the PK "studio_id" of the "studio" data equals the FK "studio_id" of the "movie" table, like so:
+Clearly, of course, most of these combinations don't make any sense.  *The Incredibles* is a Disney picture, so there's no circumstance where you'd want a row matching it up with Paramount or Warner Bros.  Recall from Chapter 1's lab that the `WHERE` clause allows us to filter the rows of a result.  What you'd want to do now is to keep only those matchups where the PK "studio_id" of the "studio" data equals the FK "studio_id" of the "movie" table, like so:
 
     lab2=# SELECT name, title FROM studio, movie
     lab2-# WHERE studio.studio_id = movie.studio_id;
@@ -584,7 +584,7 @@ At the start of this chapter, I said that in an old-fashioned hierarchical datab
      Inception
     (2 rows)
 
-## Inner and outer joins
+### Inner and outer joins
 
 You'll see a lot more SQL tricks involving joins throughout this book.  One last twist I'd like to add in this chapter is the concept of inner and outer joins.  Natural joins, and indeed all of the joins so far, are **inner joins** because they only return those rows of the original tables that participate in the relationship.  To illustrate this, look what happens when you join "movie" with "script", keeping in mind that we only created one row of "script":
 
