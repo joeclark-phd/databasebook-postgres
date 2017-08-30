@@ -32,7 +32,7 @@ Relations (remember, this is the mathematical term for what we're calling "table
 
 The key relational operations identified by E. F. Codd and derived from set theory are the **projection**, **selection**, and **Cartesian product** operations, but to this database developers have added several more very useful operations, particularly **extended projection**, aggregation, grouping, and sorting.  See Table 3-2.
 
-{title="Table 3-2: Important relational operations in SQL queries"}
+{title="Table 3-2: Important relational operations in SQL queries", width="wide"}
 | Operation | SQL clause | Symbol | Meaning |
 |===========|============|========|=========|
 | Projection | `SELECT` | {$$}\sigma{/$$} | Return only the specified columns |
@@ -40,7 +40,7 @@ The key relational operations identified by E. F. Codd and derived from set theo
 | Cartesian product | `CROSS JOIN` | {$$}\times{/$$} | Return every combination of a row from table 1 with a row from table 2 |
 | Natural join | `NATURAL JOIN` | {$$}\Join{/$$} | Return all combinations of rows in specified tables that are equal on their common column |
 | Extended projection | `SELECT` | {$$}\sigma{/$$} | Create new columns, such as calculations, and include those in the result |
-| Aggregation | `SUM`, `COUNT`, `AVERAGE` etc. | {$$}G_{f(x)}{/$$} Replace original rows with a single row containing the computed result |
+| Aggregation | `SUM`, `COUNT`, `AVERAGE` etc. | {$$}G_{f(x)}{/$$} | Replace original rows with a single row containing the computed result |
 | Grouping | `GROUP BY` | {$$}_xG{/$$} | In combination with aggregation, split the original data into subsets to yield subtotals, subaverages, or whatever |
 | Sorting | `ORDER BY` | n/a | Re-arrange the rows in a specific order | 
 
