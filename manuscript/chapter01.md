@@ -44,17 +44,17 @@ A> If your goal is simply to learn SQL or relational data modeling, though, SQLi
 
 ### What you'll learn from this book
 
-This book will introduce you to **relational databases**, with data modeling and SQL first and foremost.  It covers the scope of a typical first database course in an information systems or analytics program at the university level.  It can be used as a textbook for an instructor-led course---instructors, please contact the author for an instructor's guide, slides and materials---or used for self-guided study with or without the video lectures produced by the author (coming soon via Leanpub).
+This book will introduce you to **relational databases**, with data modeling and the SQL language first and foremost.  It covers the scope of a typical first database course in an information systems or analytics program at the university level.  It can be used as a textbook for an instructor-led course---instructors, please contact the author for an instructor's guide, slides and materials---or used for self-guided study with or without the video lectures produced by the author (coming soon via Leanpub).
 
 My main goal in creating this book is to make data modeling and SQL understandable to the reader, so it may serve as a good low-cost supplement for students who are struggling with a theory-heavy textbook and having a hard time getting the point.  Instead of starting with loads of theory up-front, I'll take a more pragmatic approach based on relational data modeling "patterns" and examples.  
 
-This book will also provide a lot of practice using SQL, the structured query language common to all relational databases, because the most frequent feedback I've heard from my undergraduate students (and from companies that hire them) is that they need more practice with SQL.
+This book will also provide a lot of practice using SQL, the **structured query language** common to all relational databases, because the most frequent feedback I've heard from my undergraduate students (and from companies that hire them) is that they need more practice with SQL.
 
 The database of choice for this book is PostgreSQL (often nicknamed "Postgres"), an open-source database that has become quite popular with developers in recent years.  Compared to some other popular databases like SQL Server and MySQL, there aren't many good books about Postgres, so I hope this book will be valuable if only for its examples.  Postgres makes a good choice for teaching because it is free software (both "free as in free speech" and "free as in free beer"), and because it runs on all the major platforms---Windows, Mac OS, and Linux---so you can follow this book no matter what kind of computer you have handy.
 
-Rest assured that the lessons of this book are transferable to other relational databases.  Each of the major brands has its own quirks and special features, but this book mainly covers the fundamentals that apply everywhere.  As currently planned, one chapter will exhibit some of PostgreSQL's special features.
+Rest assured that the lessons of this book are transferable to other relational databases.  Each of the major brands has its own quirks and special features, but this book mainly covers the fundamentals that apply everywhere.  As currently planned, one chapter (Chapter 7) will exhibit some of PostgreSQL's distinctive features and capabilities.
 
-A> If this book finds any significant success with readers, I fully intend to create additional versions of the text that highlight SQLite, MySQL, Access, or whatever other platforms people are interested in.  Give me feedback!
+A> If this book finds any significant success with readers, I fully intend to create additional versions of the text that highlight SQLite, MySQL, Access, or whatever other platforms people are interested in.  Give me feedback through Leanpub!
 
 ## Lab 1: your first PostgreSQL database
 
@@ -63,7 +63,7 @@ A> If this book finds any significant success with readers, I fully intend to cr
 PostgreSQL is available for free at [www.postgresql.org](https://www.postgresql.org) and is extremely well documented there.  Installation instructions will vary depending on your platform, and should be pretty straightforward.  You can probably accept all the default configuration options. Be sure to remember the password you set during installation.  You're up and running when you can enter the command `psql` at your system's command line to log in to the local PostgreSQL server.  You will recognize this by a readout of the `psql` version number, a statement about how to get help, and a change to the command prompt.  At the time of this writing, it looks like this for me (on my Mac):
 
     $ psql
-    psql (9.6.1)
+    psql (9.6.4)
     Type "help" for help.
 
     joeclark=#
@@ -79,7 +79,7 @@ The tables you find in a relational database are properly called relations.  A *
 - Every row has the same columns.
 - Column names must all be different.
 - Each column is defined to contain just one specific type of data.
-- Each row must be unique; usually we enforce this by adding a machine-generated ID number to each row, known as the "primary key" column.
+- Each row must be unique; usually we enforce this by adding a machine-generated ID number to each row, known as the **primary key** column.
 - No inherent ordering of rows or columns, or other information about how to display the data, is stored in the table.
 
 Consequently, a relation is a simpler and less flexible structure than a table you might create in a spreadsheet program like Microsoft Excel.  Spreadsheets allow you to mix data types, to have rows with different numbers of columns, and to decorate your data with **display logic** like fonts, colors, and sizing.  Figures 1-1 and 1-2 illustrate the comparison with an example of sales data that might be recorded by a small outdoor sports mail-order business.
@@ -98,7 +98,7 @@ No other information is found in the rows of a relation except the data itself: 
 
 Let's fire up PostgreSQL and create a table.  (I probably won't use the word "relation" much after this, except for a bit of theory in Chapter 2.  Where I write "table", you should be able to figure out what I mean.)
 
-First, a note about the term "database".  As I have described it above, a database is a system that organizes and stores data and, importantly, makes it available to people who need to search or retrieve it.  Others more precise than I will distinguish between the *database*, which is the organized data store, and the *database management system* (DBMS) which is a program like PostgreSQL that creates the data store and grants us access to it.  When we call PostgreSQL (or Oracle, or SQL Server, etc.) a database, we are using the term more generally to include both the data store and the DBMS, since they go together.
+First, a note about the term "database".  As I have described it above, a database is a system that organizes and stores data and, importantly, makes it available to people who need to search or retrieve it.  Others more precise than I will distinguish between the *database*, which is the organized data store, and the **database management system** (DBMS) which is a program like PostgreSQL that creates the data store and grants us access to it.  When we call Postgres (or Oracle, or SQL Server, etc.) a database, we are using the term more generally to include both the data store and the DBMS, since they go together.
 
 To understand how we interact with PostgreSQL, though, you need a third definition of the term.  In PostgreSQL, a database is a *logical* subdivision of the data store.  You may create any number of tables grouped into databases on the same server.  (For the purposes of this book's labs, your personal computer is acting as a PostgreSQL server.)  Table names must be unique within a database, but not within a server.  If several examples in this book include a table called "customers", you can avoid a conflict by creating a new database for each lab.
 
@@ -125,8 +125,8 @@ For future reference, you can also create and delete databases using SQL once yo
 
 The command-line client for PostgreSQL is `psql`, and you launch it by entering `psql` on the command line.  This will not open a new window, but rather you will see a brief welcome and the command prompt will be different from the operating system's default prompt.
 
-    $ psql -U postgres
-    psql (9.6.1)
+    $ psql
+    psql (9.6.4)
     Type "help" for help.
 
     joeclark=#
@@ -202,7 +202,7 @@ Regardless of how you insert data into the table, please add at least several re
 
 #### Querying your data with SQL
 
-SQL is the **structured query language** more or less common to all relational databases, and it really shines for its ability to extract just the data you want from a table or group of tables.  What kinds of queries might you want to make of this data?  You might want specific subsets of the data, such as all the orders for a particular product or in a particular state.  Or you might want to aggregate the data, that is, sum or count or average them, perhaps in groups.  Even with one simple table, there are quite a few ways to query it.
+SQL is the structured query language more or less common to all relational databases, and it really shines for its ability to extract just the data you want from a table or group of tables.  What kinds of queries might you want to make of this data?  You might want specific subsets of the data, such as all the orders for a particular product or in a particular state.  Or you might want to aggregate the data, that is, sum or count or average them, perhaps in groups.  Even with one simple table, there are quite a few ways to query it.
 
 Let's start with the basics.  Your first query is the simplest: it just requests *all* the data.
 
@@ -255,7 +255,7 @@ No matter how many rows were in the original table, the query above returns just
     SELECT COUNT(order_id)
     FROM purchases;
     
-The `COUNT` function actually counts the number of rows, not the number of unique values.  If you used `COUNT(state)` instead of `COUNT(order_id)` you'd get the same result.  Even if you have five hundred purchases in 50 states, the `COUNT` would be 500, not 50.  Since the parameter given to the `COUNT` function doesn't matter, it's often easier to simply use `COUNT(*)`.
+The `COUNT` function actually counts the number of non-null values in the specified column, not the number of unique values.  If you used `COUNT(state)` instead of `COUNT(order_id)` you'd get the same result.  Even if you have five hundred purchases in 50 states, the `COUNT` would be 500, not 50.  If you have set up the table to allow nulls (empty or missing values) in the specified column, then you might get a result of less than 500.  If you want to be sure to get exactly the total number of rows, simply use `COUNT(*)`.
 
 A grand total (or count, or average) is interesting, but a lot of the time what we want to do are compare subtotals (or counts, or averages) for various groupings of the data.  To do this, we introduce a "GROUP BY" clause.  If we want to know how many purchases were made in each of several categories, we can group by the "category" column and count up the rows in each group:
 
@@ -278,13 +278,13 @@ To get just the top ten, here's a trick: sort the data in descending ("DESC") or
     ORDER BY 2 DESC
     LIMIT 10;
     
-In Chapter 3 and beyond you'll learn a lot more SQL, such as how to create queries that "join" multiple tables, and how to write queries that employ nested sub-queries.  Even in this example, though, you've seen several of the main parts of a `SELECT` query, including the "WHERE", "GROUP BY", and "ORDER BY" clauses, and aggregate queries.  You have begun to see that even a simple one-table database may be queried in several different ways, and that doing this with short SQL queries may be much easier than trying to wrangle the data in Excel.
+In Chapter 2 and beyond you'll learn a lot more SQL, such as how to create queries that "join" multiple tables, and how to write queries that employ nested sub-queries.  Even in this example, though, you've seen several of the main parts of a `SELECT` query, including the "WHERE", "GROUP BY", and "ORDER BY" clauses, and aggregate queries.  You have begun to see that even a simple one-table database may be queried in several different ways, and that doing this with short SQL queries may be much easier than trying to wrangle the data in Excel.
 
 I recommend that you attempt the exercises and challenges at the end of this chapter to get more practice with the basics of relational databases, SQL, and PostgreSQL specifically.
 
 ## Summary
 
-TBD
+A database serves as a respository for data and a system to manage it, a "single source of truth" that can mitigate problems organizations face when working with information---coordination, version control, and information security, to name a few.  A database becomes a key piece of business infrastructure when numerous people and systems depend on it.  Accordingly, the database typically operates as a server, a system that is always on, always ready to respond to requests from other systems.  Database administrators are the professionals who engineer and maintain databases.  There are many types of databases; this book focuses on the most popular and versatile type---the relational database.  PostgreSQL is an increasingly popular, open-source, and cross-platform relational database that should serve us well as a platform for learning relational modeling and the SQL query language.  These concepts are easy to transfer to other relational databases once you learn them
 
 ### Definitions
 
@@ -295,6 +295,9 @@ database
 : (in common usage) a system that organizes and stores data and, importantly, makes it available to people and systems that need to search or retrieve it
 : (more precisely) the structured data stored by such a system, which is created and accessed using a database management system (DBMS)
 : (in PostgreSQL) a logical grouping of tables within a PostgreSQL server
+
+database administrator (DBA)
+: a professional responsible for developing, securing, and maintaining the database(s) that an organization depends on
 
 database management system (DBMS)
 : a software system used to create, manage, and query a database
@@ -319,6 +322,9 @@ Postgres
 
 PostgreSQL
 : an advanced open-source RDBMS increasingly popular with software developers; freely available at [www.postgresql.org](https://www.postgresql.org)
+
+primary key
+: a column in a data table that is guaranteed to have a unique value for each row, and therefore allow us to retrieve a specific piece of data
 
 query
 : (v) to request specified data from a database
@@ -353,9 +359,6 @@ help
 \h
 : list all SQL commands supported by PostgreSQL
 
-\conninfo
-: report which database you're working in, and which account you're logged in with
-
 \c <database>
 : switch to working in the specified database
 
@@ -369,14 +372,13 @@ TBD
 ## Challenges
 
 1. Look up and read an encyclopedia entry on databases.  Did you learn anything that you think ought to have been included in this chapter?  Email the author or leave feedback on Leanpub!
-2. Find and read the official PostgreSQL documentation on the "CREATE TABLE" command.
-3. What are some of the other rules or constraints you can place on a column?  Name three, and speculate on when they would be useful.
-4. Look up the documentation on data types supported by PostgreSQL.  There are a lot of them.  Make a short list (or a cheat sheet) of the five or six data types you think you'd use most often.
-5. Try to find out on your own how to use the "ALTER TABLE" command to add a new column to an existing table.  Specifically, add a "date" column to the "purchases" table used as an example in this chapter.
-6. PostgreSQL offers a graphical user interface (GUI) called **pgAdmin**, which may have been installed with it.  Find this program on your computer or install it, and figure out how to log in to your PostgreSQL database(s) with it.
-7. On your own, figure out how to use pgAdmin to create a new table in the "lab1" database.  Make sure it has a primary key column.  Can you add some sample data to the table without having to use SQL "INSERT" commands?
-8. See if you can find out how to open a window within pgAdmin to execute arbitrary SQL commands.  Run some of the example SQL queries from this chapter through that interface.
-9. Other graphical front-ends for PostgreSQL (besides pgAdmin) are available, some free (or free to students) and some commercial.  Find and examine one or two of these alternatives.  What do you think of them?
+2. Find and read the official PostgreSQL documentation on the "CREATE TABLE" command. What are some of the other rules or constraints you can place on a column?  Name three, and speculate on when they would be useful.
+3. Look up the documentation on data types supported by PostgreSQL.  There are a lot of them.  Make a short list (or a cheat sheet) of the five or six data types you think you'd use most often.
+4. Try to find out on your own how to use the "ALTER TABLE" command to add a new column to an existing table.  Specifically, add a "date" column to the "purchases" table used as an example in this chapter.
+5. PostgreSQL offers a graphical user interface (GUI) called **pgAdmin**, which may have been installed with it.  Find this program on your computer or install it, and figure out how to log in to your PostgreSQL database(s) with it.
+6. On your own, figure out how to use pgAdmin to create a new table in the "lab1" database.  Make sure it has a primary key column.  Can you add some sample data to the table without having to use SQL "INSERT" commands?
+7. See if you can find out how to open a window within pgAdmin to execute arbitrary SQL commands.  Run some of the example SQL queries from this chapter through that interface.
+8. Other graphical clients for PostgreSQL (besides pgAdmin) are available, some free (or free to students) and some commercial.  Find and examine one or two of these alternatives.  What do you think of them?
 
 ### Exercises
 

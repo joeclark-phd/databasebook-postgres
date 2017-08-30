@@ -86,7 +86,7 @@ A> If you have never accessed the command line on your Mac, you can do so throug
 
 Installing Postgres with Homebrew couldn't be easier.  Assuming you have installed Homebrew, go to a command line and type
 
-    brew install postresql
+    brew install postgresql
 
 ![Figure A-12: Installing PosgreSQL with Homebrew](/images/A-12macbrewinstall.png)
 
