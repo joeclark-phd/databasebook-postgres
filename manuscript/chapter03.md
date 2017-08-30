@@ -8,16 +8,16 @@ Inside a DBMS like Postgres is a special function called the **query optimizer**
 
 {title="Table 3-1: Sample of primitive operations in query execution"}
 | Operation | Meaning |
-|===========|=========|
+|--------------------|
 | Full table scan |   |
-|=================|===|
+|--------------------|
 | Index scan (aka "seek") |        |
-|=================|===|
+|--------------------|
 | Table access |      |
-|=============|======|
+|--------------------|
 | Hash join |        |
-|=============|======|
-| Nested loop join |=|
+|--------------------|
+| Nested loop join | |
 
 
 Here is a key point that I'll come back to repeatedly: you should take advantage of the work that the database developers have already done.  Yes, you *could* write your own execution plan, or your own program for processing the data, but it would take a lot of time and you might not get it right.  Database engines are designed by some of the smartest computer scientists in the world and honed by practical experience for years, and they have very likely anticipated queries like yours.  Give the database the freedom to optimize, and it will generally do an excellent job.
