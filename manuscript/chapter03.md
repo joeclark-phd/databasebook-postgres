@@ -73,6 +73,17 @@ These are certainly the most common operations, and most queries will employ bot
     WHERE team='Patriots' AND position='QB';
 
 This query may be expressed in relational algebra as {$$}\Pi_{name,age}(\sigma_{team=Patriots \land position=QB}(players)){/$$}.  This formulation implies that the selection operation should be computed first, and then the projection operation.  But because it is an algebra, and because the outcome of every operation is another relation, we could just as easily flip it around, i.e.: {$$}\sigma_{team=Patriots \land position=QB}(\Pi_{name,age}(players)){/$$}.  This kind of flexibility gives the query opimizer room to make choices that speed up the query.  
+
+The third of the "original" relational operations is the **Cartesian product** operation which joins every row of one table with every row of a second table.  The Cartesian product is expressed in PostgreSQL as `CROSS JOIN` and one way it sometimes comes in handy is to generate a cross-tabulation of the rows of two tables.  For example, if you want a report to yield some statistics about every football team in every year (perhaps to build a line graph?), the core of the query might be:
+
+    SELECT * FROM teams CROSS JOIN seasons;
+
+Or in relational algebra, {$$}team \times season{/$$}.  The more common type of join, as discussed in Chapter 2, is a **natural join**, where each row of one table is joined with only the rows of the other table that have matching values of a specific column (i.e., a foreign key - primary key relationship).  In Postgres there is actually a `NATURAL JOIN` keyword that works when the columns literally have the same name.  If they have different names (for example, if a "players" table has a FK called "team_id" but in the "teams" table it's simply called "id"), you can use either a `JOIN` clause or a `WHERE` condition to effect the join.  These are three ways you might perform a natural join on two tables in SQL:
+
+    SELECT * FROM players NATURAL JOIN teams;
+    SELECT * FROM players JOIN teams ON player.team_id=team.id;
+    SELECT * FROM players, teams WHERE player.team_id=team.id;
+
 ### Extensions to the relational toolkit
 
 Although relational modeling and relational algebra originate in set theory, database developers and users have made numerous pragmatic extensions to the original theory-derived set of methods we can apply.  After all, a database isn't an academic exercise, but a practical business tool.
