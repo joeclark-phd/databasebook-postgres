@@ -68,7 +68,7 @@ These are certainly the most common operations, and most queries will employ bot
     FROM players
     WHERE team='Patriots' AND position='QB';
 
-This query may be expressed in relational algebra as {$$}\Pi_{name,age}(\sigma_{team=Patriots\landposition=QB}(players)){/$$}.  This formulation implies that the selection operation should be computed first, and then the projection operation.  But because it is an algebra, and because the outcome of every operation is another relation, we could just as easily flip it around, i.e.: {$$}\sigma_{team=Patriots\landposition=QB}(\Pi_{name,age}(players)){/$$}.  This kind of flexibility give the query opimizer room to make choices that speed up the query.  
+This query may be expressed in relational algebra as {$$}\Pi_{name,age}(\sigma_{team=Patriots,position=QB}(players)){/$$}.  This formulation implies that the selection operation should be computed first, and then the projection operation.  But because it is an algebra, and because the outcome of every operation is another relation, we could just as easily flip it around, i.e.: {$$}\sigma_{team=Patriots,position=QB}(\Pi_{name,age}(players)){/$$}.  This kind of flexibility give the query opimizer room to make choices that speed up the query.  
 
 Project, select.
 
