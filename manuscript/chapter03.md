@@ -90,6 +90,7 @@ In relational algebra, the natural join is expressed as {$$}players \join _{team
 
     SELECT * FROM players JOIN teams ON players.team_id != teams.id;
 
+In relational algebra notation this is {$$}players \join _{teamid \neq id} teams{/$$}.  Such a join is generally going to be quite expensive in computational terms because the database engine must perform a *nested loop*: for each row of the "players" table it must loop through the entire "teams" table to find relevant rows.
 
 ### Extensions to the relational toolkit
 
@@ -117,7 +118,6 @@ If we want to compute aggregates for subsets of the data, we use `GROUP BY` to g
 
     SELECT team, AVG(salary) FROM players GROUP BY team;
 
-In relational algebra notation, the grouping and aggregation operations are denoted by a capital "G"; the grouping column in a preceding subscript and the aggregation function in the following subscript.  The above example would be expressed {$$}_{team} G _{AVG(salary)} (players){/$$}.
 
 A final important operation is **sorting**.  Although in theory the order of rows in a relation is meaningless (it's a set), in practice we want to sort the rows into some kind of meaningful order.  There is no standard notation for this operation in relational algebra, but in SQL it's expressed in the `ORDER BY` clause of a query:
 
