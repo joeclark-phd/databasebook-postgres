@@ -9,15 +9,15 @@ Inside a DBMS like Postgres is a special function called the **query optimizer**
 {title="Table 3-1: Sample of primitive operations in query execution"}
 | Operation | Meaning |
 |--------------------|
-| Full table scan |   |
+| Full table scan |  Read every row in the table and find the one(s) specified by the query.  |
 |--------------------|
-| Index scan (aka "seek") |        |
+| Index scan (aka "seek") |  Search an index to quickly find locations of the rows specified by the query.  A database index is conceptually like the index in the back of a book; it makes finding the right "page" much quicker, more so when the book is longer. |
 |--------------------|
-| Table access |      |
+| Table access |  Go directly to the location of the specified row(s) and read the data. |
 |--------------------|
-| Hash join |        |
+| Hash join | A two-phase algorithm to quickly join two tables based on an equality condition.  |
 |--------------------|
-| Nested loop join | |
+| Nested loop join | A slower join algorithm that accommodates inequality conditions and other unusual joins.  |
 
 
 Here is a key point that I'll come back to repeatedly: you should take advantage of the work that the database developers have already done.  Yes, you *could* write your own execution plan, or your own program for processing the data, but it would take a lot of time and you might not get it right.  Database engines are designed by some of the smartest computer scientists in the world and honed by practical experience for years, and they have very likely anticipated queries like yours.  Give the database the freedom to optimize, and it will generally do an excellent job.
@@ -50,6 +50,25 @@ The key relational operations identified by E. F. Codd and derived from set theo
 | Grouping | `GROUP BY` | {$$}_xG{/$$} | In combination with aggregation, split the original data into subsets to yield subtotals, subaverages, or whatever |
 |-----|
 | Sorting | `ORDER BY` | n/a | Re-arrange the rows in a specific order | 
+
+**Projection** is the operation of reducing a table to a subset of its columns, and in SQL it is expressed as a list of columns following the `SELECT` keyword, for example:
+
+    SELECT name, age
+    FROM players;
+
+**Selection** is the operation of reducing a table to a subset of its rows, and in SQL it is expressed as a logical test (for equality or inequality) follwing the `WHERE` keyword.  Multiple conditions may be combined into one with the `AND` and `OR` keywords if needed.  For example:
+
+    SELECT *
+    FROM players
+    WHERE team='Patriots' AND position='QB';
+
+These are certainly the most common operations, and most queries will employ both.  Consider the query
+
+    SELECT name, age
+    FROM players
+    WHERE team='Patriots' AND position='QB';
+
+This query may be expressed in relational algebra as {$$}\Pi_{name,age}(\sigma_{team=Patriots\landposition=QB}(players)){/$$}.  This formulation implies that the selection operation should be computed first, and then the projection operation.  But because it is an algebra, and because the outcome of every operation is another relation, we could just as easily flip it around, i.e.: {$$}\sigma_{team=Patriots\landposition=QB}(\Pi_{name,age}(players)){/$$}.  This kind of flexibility give the query opimizer room to make choices that speed up the query.  
 
 Project, select.
 
