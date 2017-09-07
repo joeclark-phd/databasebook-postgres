@@ -43,13 +43,17 @@ The key relational operations identified by E. F. Codd and derived from set theo
 |-----|
 | Natural join | `NATURAL JOIN` | {$$}\Join{/$$} | Return all combinations of rows in specified tables that are equal on their common column |
 |-----|
-| Extended projection | `SELECT` | {$$}\sigma{/$$} | Create new columns, such as calculations, and include those in the result |
+| Extended projection | `SELECT` | {$$}\sigma{/$$} | Generate new columns in the resulting table, such as the results of calculations or logical tests |
 |-----|
-| Aggregation | `SUM`, `COUNT`, `AVERAGE` etc. | {$$}G_{f(x)}{/$$} | Replace original rows with a single row containing the computed result |
+| Aliasing | optional `AS` | {$$}\rho{/$$} | Assign a (new) name to a column in the resulting table | 
+|-----|
+| Aggregation | `SUM`, `COUNT`, `AVG`, etc. | {$$}G_{f(x)}{/$$} | Replace original rows with a single row containing the computed result |
 |-----|
 | Grouping | `GROUP BY` | {$$}_xG{/$$} | In combination with aggregation, split the original data into subsets to yield subtotals, subaverages, or whatever |
 |-----|
 | Sorting | `ORDER BY` | n/a | Re-arrange the rows in a specific order | 
+
+### Basic relational operations from set theory
 
 **Projection** is the operation of reducing a table to a subset of its columns, and in SQL it is expressed as a list of columns following the `SELECT` keyword, for example:
 
@@ -68,19 +72,59 @@ These are certainly the most common operations, and most queries will employ bot
     FROM players
     WHERE team='Patriots' AND position='QB';
 
-This query may be expressed in relational algebra as {$$}\Pi_{name,age}(\sigma_{team=Patriots \land position=QB}(players)){/$$}.  This formulation implies that the selection operation should be computed first, and then the projection operation.  But because it is an algebra, and because the outcome of every operation is another relation, we could just as easily flip it around, i.e.: {$$}\sigma_{team=Patriots,position=QB}(\Pi_{name,age}(players)){/$$}.  This kind of flexibility gives the query opimizer room to make choices that speed up the query.  
+This query may be expressed in relational algebra as {$$}\Pi_{name,age}(\sigma_{team=Patriots \land position=QB}(players)){/$$}.  This formulation implies that the selection operation should be computed first, and then the projection operation.  But because it is an algebra, and because the outcome of every operation is another relation, we could just as easily flip it around, i.e.: {$$}\sigma_{team=Patriots \land position=QB}(\Pi_{name,age}(players)){/$$}.  This kind of flexibility gives the query opimizer room to make choices that speed up the query.  
 
-Project, select.
+The third of the "original" relational operations is the **Cartesian product** operation which joins every row of one table with every row of a second table.  The Cartesian product is expressed in PostgreSQL as `CROSS JOIN` and one way it sometimes comes in handy is to generate a cross-tabulation of the rows of two tables.  For example, if you want a report to yield some statistics about every football team in every year (perhaps to build a line graph?), the core of the query might be:
 
-Cartesian product, natural join.
+    SELECT * FROM teams CROSS JOIN seasons;
 
-Extended projection. Aliasing.
+Or in relational algebra, {$$}team \times season{/$$}.  The more common type of join, as discussed in Chapter 2, is a **natural join**, where each row of one table is joined with only the rows of the other table that have matching values of a specific column (i.e., a foreign key - primary key relationship).  In Postgres there is actually a `NATURAL JOIN` keyword that works when the columns literally have the same name.  If they have different names (for example, if a "players" table has a FK called "team_id" but in the "teams" table it's simply called "id"), you can use either a `JOIN` clause or a `WHERE` condition to effect the join.  These are three ways you might perform a natural join on two tables in SQL:
 
-Aggregations, group bys.
+    SELECT * FROM players NATURAL JOIN teams;
+    SELECT * FROM players JOIN teams ON player.team_id=team.id;
+    SELECT * FROM players, teams WHERE player.team_id=team.id;
 
-Window functions.
+In relational algebra, the natural join is expressed as {$$}players \join _{team_id=id} teams{/$$}; the subscript expressing the join condition can be omitted if the FK-PK relationship is obvious.  You *could* perform a natural join by first taking the Cartesian product and then *selecting* the rows where the FK matches the PK, à la {$$}\sigma _{team_id=id} (players \times teams){/$$}, and in theory this is what the database engine is doing.  In practice, the query optimizer will use an algorithm like a *hash join* to perform an equality join much more quickly.
 
-Inequality joins.
+**Inequality joins** are also possible.  If you want to join each player with teams he is *not* on, in order to perform some kind of comparison, you might do the following:
+
+    SELECT * FROM players JOIN teams ON players.team_id != teams.id;
+
+In relational algebra notation this is {$$}players \join _{team_id \ne id} teams{/$$}.  Such a join is generally going to be quite expensive in computational terms because the database engine must perform a *nested loop*: for each row of the "players" table it must loop through the entire "teams" table to find relevant rows.
+
+### Extensions to the relational toolkit
+
+Although relational modeling and relational algebra originate in set theory, database developers and users have made numerous pragmatic extensions to the original theory-derived set of methods we can apply.  After all, a database isn't an academic exercise, but a practical business tool.
+
+The idea behind **extended projection** is that a query can give us not only a selection of columns *from* the original table(s), but can also produce new columns as a result of calculations or logical tests.  For example:
+
+    SELECT running_yards + passing_yards FROM game_results;
+
+A closely associated idea is that of **aliasing** (also known as the "rename" operation), an operation that changes the name of a column or assigns a name to a column that doesn't have one (such as the calculated column above).  In Postgres, you can use the optional `AS` keyword, or simply provide an alias after specifying the column:
+
+    SELECT running_yards + passing yards AS total_yards FROM game_results;
+    SELECT first_name || ' ' || last_name AS full_name FROM players;
+    SELECT age > 35 oldguy FROM players;
+
+The last query above is an example that contains a logical test, "`age > 35`", and the result will be a column called "oldguy" that contains Boolean values: "true" and "false".  The `AS` keyword is omitted; it is optional, but may make your queries easier to read.  
+
+Another powerful extension to relational algebra is **aggregation**; this allows us to generate new *rows* that do not come from the original tables, but instead are the result of calculations over some or all of the original rows.  The aggregations you will use most frequently are `SUM` and `COUNT`, but a number of other [aggregate functions in Postgres](https://www.postgresql.org/docs/current/static/functions-aggregate.html) are available, particularly for statistics such as `MIN`, `MAX`, `AVG` and so on.  
+
+Aggregation works together with the operation of **grouping**, which identifies the set(s) of rows to be aggregated together.  If no grouping condition is set by a `GROUP BY` clause in the SQL, all rows are aggregated into one result.  To count the number of teams, for example, we could simply do:
+
+    SELECT COUNT(*) FROM teams;
+
+If we want to compute aggregates for subsets of the data, we use `GROUP BY` to generate a group for each distinct value of a particular column, for example:
+
+    SELECT team, AVG(salary) FROM players GROUP BY team;
+
+In relational algebra notation, the grouping and aggregation operations are denoted by a capital "G"; the grouping column in a preceding subscript and the aggregation function in the following subscript.  The above example would be expressed {$$}_{team}G_{AVG(salary)}(players){/$$}.
+
+A final important operation is **sorting**.  Although in theory the order of rows in a relation is meaningless (it's a set), in practice we want to sort the rows into some kind of meaningful order.  There is no standard notation for this operation in relational algebra, but in SQL it's expressed in the `ORDER BY` clause of a query:
+
+    SELECT player ORDER BY last_name, first_name;
+
+The relational operations listed here are the key components from which you'll build most of your queries, and they are common to virtually all relational databases.  In Chapter 5, we'll introduce you to some additional relational patterns that are useful in special cases, and in Chapter 7 we'll explore some of the special features of PostgreSQL that distinguish it from other relational databases.
 
 ## Queries within queries
 
@@ -101,6 +145,7 @@ Find highest-scoring player on every team.
 Do an inequality join to identify coach based on start date (arbitrary).
 Show teams' ranks with window function.
 Join with generated calendar to show wins/losses per month.
+Include some compound logical tests with AND and OR.
 
 Show how to explain a query, impose your own dumb query plan, and to time a query.
 

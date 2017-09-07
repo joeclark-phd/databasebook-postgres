@@ -245,7 +245,7 @@ Another condition you might use, for a primitive text search, is "LIKE".  The "`
     
 #### Aggregate queries
 
-The queries above allow you to carve out subsets of the data by requesting only certain columns, certain rows, or both.  In every example, though, the rows you get in the result are rows from the original table.  Aggregate queries are those that generate data by combining the original rows via an **aggregation function**, usually `SUM`, `COUNT`, or `AVERAGE`.  Obviously the sum of two rows is one row, and is not identical to either of the original rows.  The following query gives you the total dollar amount of all purchases in the table:
+The queries above allow you to carve out subsets of the data by requesting only certain columns, certain rows, or both.  In every example, though, the rows you get in the result are rows from the original table.  Aggregate queries are those that generate data by combining the original rows via an **aggregation function**, usually `SUM`, `COUNT`, or `AVG`.  Obviously the sum of two rows is one row, and is not identical to either of the original rows.  The following query gives you the total dollar amount of all purchases in the table:
 
     SELECT SUM(price)
     FROM purchases;
