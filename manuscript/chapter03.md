@@ -90,7 +90,7 @@ In relational algebra, the natural join is expressed as {$$}players \join _{team
 
     SELECT * FROM players JOIN teams ON players.team_id != teams.id;
 
-In relational algebra notation this is {$$}players \join _{teamid \neq id} teams{/$$}.  Such a join is generally going to be quite expensive in computational terms because the database engine must perform a *nested loop*: for each row of the "players" table it must loop through the entire "teams" table to find relevant rows.
+In relational algebra notation this is {$$}players \join _{teamid id} teams{/$$}.  Such a join is generally going to be quite expensive in computational terms because the database engine must perform a *nested loop*: for each row of the "players" table it must loop through the entire "teams" table to find relevant rows.
 
 ### Extensions to the relational toolkit
 
