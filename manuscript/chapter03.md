@@ -78,19 +78,19 @@ The third of the "original" relational operations is the **Cartesian product** o
 
     SELECT * FROM teams CROSS JOIN seasons;
 
-Or in relational algebra, {$$}team \times season{/$$}.  The more common type of join, as discussed in Chapter 2, is a **natural join**, where each row of one table is joined with only the rows of the other table that have matching values of a specific column (i.e., a foreign key - primary key relationship).  In Postgres there is actually a `NATURAL JOIN` keyword that works when the columns literally have the same name.  If they have different names (for example, if a "players" table has a FK called "team_id" but in the "teams" table it's simply called "id"), you can use either a `JOIN` clause or a `WHERE` condition to effect the join.  These are three ways you might perform a natural join on two tables in SQL:
+Or in relational algebra, {$$}teams\times seasons{/$$}.  The more common type of join, as discussed in Chapter 2, is a **natural join**, where each row of one table is joined with only the rows of the other table that have matching values of a specific column (i.e., a foreign key - primary key relationship).  In Postgres there is actually a `NATURAL JOIN` keyword that works when the columns literally have the same name.  If they have different names (for example, if a "players" table has a FK called "team_id" but in the "teams" table it's simply called "id"), you can use either a `JOIN` clause or a `WHERE` condition to effect the join.  These are three ways you might perform a natural join on two tables in SQL:
 
     SELECT * FROM players NATURAL JOIN teams;
     SELECT * FROM players JOIN teams ON player.team_id=team.id;
     SELECT * FROM players, teams WHERE player.team_id=team.id;
 
-In relational algebra, the natural join is expressed as {$$}players \Join _{team\_id=id} teams{/$$}; the subscript expressing the join condition can be omitted if the FK-PK relationship is obvious.  You *could* perform a natural join by first taking the Cartesian product and then *selecting* the rows where the FK matches the PK, a la {$$}\sigma _{team\_id=id} (players \times teams){/$$}, and in theory this is what the database engine is doing.  In practice, the query optimizer will use an algorithm like a *hash join* to perform an equality join much more quickly.
+In relational algebra, the natural join is expressed as {$$}players\Join _{team\_id=id} teams{/$$}; the subscript expressing the join condition can be omitted if the FK-PK relationship is obvious.  You *could* perform a natural join by first taking the Cartesian product and then *selecting* the rows where the FK matches the PK, a la {$$}\sigma _{team\_id=id} (players \times teams){/$$}, and in theory this is what the database engine is doing.  In practice, the query optimizer will use an algorithm like a *hash join* to perform an equality join much more quickly.
 
 **Inequality joins** are also possible.  If you want to join each player with teams he is *not* on, in order to perform some kind of comparison, you might do the following:
 
     SELECT * FROM players JOIN teams ON players.team_id != teams.id;
 
-In relational algebra notation this is {$$}players \Join _{team\_id \neq id} teams{/$$}.  Such a join is generally going to be quite expensive in computational terms because the database engine must perform a *nested loop*: for each row of the "players" table it must loop through the entire "teams" table to find relevant rows.
+In relational algebra notation this is {$$}players\Join _{team\_id \neq id} teams{/$$}.  Such a join is generally going to be quite expensive in computational terms because the database engine must perform a *nested loop*: for each row of the "players" table it must loop through the entire "teams" table to find relevant rows.
 
 ### Extensions to the relational toolkit
 
