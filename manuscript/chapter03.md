@@ -45,6 +45,7 @@ The key relational operations identified by E. F. Codd and derived from set theo
 |-----|
 | Extended projection | `SELECT` | {$$}\sigma{/$$} | Generate new columns in the resulting table, such as the results of calculations or logical tests |
 |-----|
+| Aliasing | optional `AS` | {$$}\rho{/$$} | Assign a (new) name to a column in the resulting table | 
 |-----|
 | Aggregation | `SUM`, `COUNT`, `AVG`, etc. | {$$}G_{f(x)}{/$$} | Replace original rows with a single row containing the computed result |
 |-----|
@@ -72,25 +73,6 @@ These are certainly the most common operations, and most queries will employ bot
     WHERE team='Patriots' AND position='QB';
 
 This query may be expressed in relational algebra as {$$}\Pi_{name,age}(\sigma_{team=Patriots \land position=QB}(players)){/$$}.  This formulation implies that the selection operation should be computed first, and then the projection operation.  But because it is an algebra, and because the outcome of every operation is another relation, we could just as easily flip it around, i.e.: {$$}\sigma_{team=Patriots \land position=QB}(\Pi_{name,age}(players)){/$$}.  This kind of flexibility gives the query opimizer room to make choices that speed up the query.  
-
-The third of the "original" relational operations is the **Cartesian product** operation which joins every row of one table with every row of a second table.  The Cartesian product is expressed in PostgreSQL as `CROSS JOIN` and one way it sometimes comes in handy is to generate a cross-tabulation of the rows of two tables.  For example, if you want a report to yield some statistics about every football team in every year (perhaps to build a line graph?), the core of the query might be:
-
-    SELECT * FROM teams CROSS JOIN seasons;
-
-Or in relational algebra, {$$}team \times season{/$$}.  The more common type of join, as discussed in Chapter 2, is a **natural join**, where each row of one table is joined with only the rows of the other table that have matching values of a specific column (i.e., a foreign key - primary key relationship).  In Postgres there is actually a `NATURAL JOIN` keyword that works when the columns literally have the same name.  If they have different names (for example, if a "players" table has a FK called "team_id" but in the "teams" table it's simply called "id"), you can use either a `JOIN` clause or a `WHERE` condition to effect the join.  These are three ways you might perform a natural join on two tables in SQL:
-
-    SELECT * FROM players NATURAL JOIN teams;
-    SELECT * FROM players JOIN teams ON player.team_id=team.id;
-    SELECT * FROM players, teams WHERE player.team_id=team.id;
-
-In relational algebra, the natural join is expressed as {$$}players \join _{teamid=id} teams{/$$}; the subscript expressing the join condition can be omitted if the FK-PK relationship is obvious.  You *could* perform a natural join by first taking the Cartesian product and then *selecting* the rows where the FK matches the PK, a la {$$}\sigma _{teamid=id} (players \times teams){/$$}, and in theory this is what the database engine is doing.  In practice, the query optimizer will use an algorithm like a *hash join* to perform an equality join much more quickly.
-
-**Inequality joins** are also possible.  If you want to join each player with teams he is *not* on, in order to perform some kind of comparison, you might do the following:
-
-    SELECT * FROM players JOIN teams ON players.team_id != teams.id;
-
-In relational algebra notation this is {$$}players \join _{teamid \neq id} teams{/$$}.  Such a join is generally going to be quite expensive in computational terms because the database engine must perform a *nested loop*: for each row of the "players" table it must loop through the entire "teams" table to find relevant rows.
-
 ### Extensions to the relational toolkit
 
 Although relational modeling and relational algebra originate in set theory, database developers and users have made numerous pragmatic extensions to the original theory-derived set of methods we can apply.  After all, a database isn't an academic exercise, but a practical business tool.
