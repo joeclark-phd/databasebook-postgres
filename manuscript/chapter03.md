@@ -84,7 +84,7 @@ Or in relational algebra, {$$}team \times season{/$$}.  The more common type of 
     SELECT * FROM players JOIN teams ON player.team_id=team.id;
     SELECT * FROM players, teams WHERE player.team_id=team.id;
 
-In relational algebra, the natural join is expressed as {$$}players \join _{teamid=id} teams{/$$}; the subscript expressing the join condition can be omitted if the FK-PK relationship is obvious.  You *could* perform a natural join by first taking the Cartesian product and then *selecting* the rows where the FK matches the PK, à la {$$}\sigma _{teamid=id} (players \times teams){/$$}, and in theory this is what the database engine is doing.  In practice, the query optimizer will use an algorithm like a *hash join* to perform an equality join much more quickly.
+In relational algebra, the natural join is expressed as {$$}players \join _{teamid=id} teams{/$$}; the subscript expressing the join condition can be omitted if the FK-PK relationship is obvious.  You *could* perform a natural join by first taking the Cartesian product and then *selecting* the rows where the FK matches the PK, a la {$$}\sigma _{teamid=id} (players \times teams){/$$}, and in theory this is what the database engine is doing.  In practice, the query optimizer will use an algorithm like a *hash join* to perform an equality join much more quickly.
 
 **Inequality joins** are also possible.  If you want to join each player with teams he is *not* on, in order to perform some kind of comparison, you might do the following:
 
