@@ -122,17 +122,44 @@ In relational algebra notation, the grouping and aggregation operations are deno
 
 A final important operation is **sorting**.  Although in theory the order of rows in a relation is meaningless (it's a set), in practice we want to sort the rows into some kind of meaningful order.  There is no standard notation for this operation in relational algebra, but in SQL it's expressed in the `ORDER BY` clause of a query:
 
-    SELECT player ORDER BY last_name, first_name;
+    SELECT * FROM players ORDER BY last_name, first_name;
 
 The relational operations listed here are the key components from which you'll build most of your queries, and they are common to virtually all relational databases.  In Chapter 5, we'll introduce you to some additional relational patterns that are useful in special cases, and in Chapter 7 we'll explore some of the special features of PostgreSQL that distinguish it from other relational databases.
 
 ## Queries within queries
 
-Subqueries, correlated and not.
+SQL queries can be much more complex than you have seen so far, when the answer to one query depends on the answer to others.  In such cases, a complete query called a **subquery** can be nested within another.  Subqueries are most often found in the `WHERE`, `FROM`, and `SELECT` clauses.  For example, this query names all players who earn a salary greater than the average:
 
-nested sub-subqueries.
+    SELECT last_name, first_name, salary FROM players
+    WHERE salary >
+      (SELECT AVG(salary) FROM players);
+
+The inner query, "`SELECT AVG(salary) FROM players`" is evaluated first and yields a single numerical result.  Then the outer query is evaluated to finish processing the query.  Just like in a mathematical expression, parentheses set the subquery apart from the clauses of the surrounding query.  (I also indented the subquery, but this is not necessary; PostgreSQL like most databases is indifferent to whitespace like spaces, tabs, and line breaks.)
+
+Subqueries in the `FROM` clause, when evaluated, produce result sets that act like tables in the outer query.  To identify all the quarterbacks in the AFC East, we could join the "players" table with the result of a subquery that selects all teams in that division:
+
+    SELECT last_name
+    FROM players JOIN 
+      (SELECT * FROM teams WHERE conference='AFC' AND division='East') AS afceast_teams
+      ON players.team=afceast_teams.team_id
+    WHERE position='QB';
+
+In this example you saw that the `AS` keyword can be used to assign a name to a table, just as previously we saw it used to assign a name to a column.  When using a subquery as a table in the `FROM` clause, it *must* be given a name.  The `AS` keyword is optional, though I think it makes the query easier to read.
+
+Another place you will often see a subquery is the `SELECT` clause.  Such a query will almost always yield a single numeric result, because in the `SELECT` clause it generates a value for a single column of query output.  Here is a simple example that lists the total salary budget for each team.  (Note that this could also be accomplished using a join and a `GROUP BY`... there are more ways than one to solve many SQL problems.)
+
+    SELECT city, team_name,
+      (SELECT SUM(salary) FROM players WHERE players.team=teams.team_id) AS total_payroll
+    FROM teams;
+
+This is a case of a **correlated subquery**, meaning that this subquery depends on some value from the outer query (namely `teams.team_id`).  Therefore, the subquery will be executed numerous times, once for each row of the "teams" table.  The queries in the previous two examples are noncorrelated (or uncorrelated) subqueries which need only be executed once.  Correlated subqueries are potentially much slower, so it could be preferable to solve this problem with a join instead of a subquery, but that's not possible in every case.  My philosophy is to trust the query optimizer (and its developers) to find the fastest way to execute the query, and not over-think the SQL: if it ain't broke, don't fix it.
+
+Finally, subqueries can be nested within subqueries.  Indeed, there may be several levels of such nesting, making for some pretty complicated queries.  As you solved complicated equations in high school by first "simplifying the expression", the query optimizer may have many ways to simplify and sequence things behind the scenes so that the query's result can be obtained as efficiently as possible.
+
 
 ## Lab
+
+TODO: 
 
 This time psql directly to the lab3 database.
 
@@ -141,10 +168,15 @@ re-introduce term DML. you have already seen INSERT and SELECT.
 Sports database of matches and wins.  
 
 Find average number of points scored per team per game.
+
 Find highest-scoring player on every team.
+
 Do an inequality join to identify coach based on start date (arbitrary).
+
 Show teams' ranks with window function.
+
 Join with generated calendar to show wins/losses per month.
+
 Include some compound logical tests with AND and OR.
 
 Show how to explain a query, impose your own dumb query plan, and to time a query.
