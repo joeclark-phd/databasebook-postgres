@@ -74,7 +74,7 @@ To quit `psql`, enter `\q` at the prompt.  If the above doesn't make any sense t
 
 Databases can be classified according to the types of abstractions they allow you to model your data with.  In a relational database, data is modeled as a set of tables with structured rows and columns.  Other data models are possible.  In a **document-oriented database** such as MongoDB, data is modeled as documents with tree-like structures.  In a **graph database** like Neo4J, data is structured as a network (a mathematical graph) with nodes and edges.  Compared to those newer forms, the relational model is far more commonly seen and better understood, and is the most versatile.  Relational databases have been tried and tested in business for nearly four decades, and are probably the best tool for the job in all but a few specialized cases.
 
-The tables you find in a relational database are properly called relations.  A **relation** is not just any table; it is a construct found in set theory and is defined by the following characteristics:
+The tables you find in a relational database are properly called *relations*.  A **relation** is not just any table; it is a construct derived from set theory and adheres to the following constraints:
 
 - Every row has the same columns.
 - Column names must all be different.
@@ -129,11 +129,11 @@ The command-line client for PostgreSQL is `psql`, and you launch it by entering 
     psql (9.6.4)
     Type "help" for help.
 
-    joeclark=#
+    postgres=#
 
 The change in the command prompt means you're in a different environment.  Here, you can enter SQL queries or some commands specific to `psql`.  The first thing I'd recommend you do is type `help`, which introduces you to a few of the latter.  Most `psql` commands begin with a backslash (\\) and you can get a full listing of them by entering the command `\?`.  If you need to quit, `\q` is the command for that.  If you want to, take some time now to explore the lists of SQL queries and `psql` commands possible.
 
-    joeclark=# help
+    postgres=# help
     You are using psql, the command-line interface to PostgreSQL.
     Type:  \copyright for distribution terms
            \h for help with SQL commands
@@ -141,10 +141,10 @@ The change in the command prompt means you're in a different environment.  Here,
            \g or terminate with semicolon to execute query
            \q to quit
        
-By default, when you start `psql` you're connecting to the database with the same name as  your PostgreSQL username.  For those of you on Windows, if you followed my installation instructions (in Appendix A), that will be "postgres".  For Mac and Linux users, the default database will be named the same as your computer login name, hence my username "joeclark" appears in the code samples above.  Any SQL commands you enter at the prompt will be executed on the default database's tables, and that isn't what we want.  To switch over to the new database you created, use the `\c` command:
+By default, when you start `psql` you're connecting to the database with the same name as  your PostgreSQL username. If you installed Postgres using Docker, or used an installer on Windows, that will probably be "postgres".  If you installed it on a Mac or Linux machine, the default database may have the same name as your computer login name.  Any SQL commands you enter at the prompt will be executed on the default database's tables, and that isn't what we want.  To switch over to the new database you created, use the `\c` command:
 
-    joeclark=# \c lab1
-    You are now connected to database "lab1" as user "joeclark".
+    postgres=# \c lab1
+    You are now connected to database "lab1" as user "postgres".
     lab1=#
     
 Notice that the prompt changes to tell you which database you're working in.  

@@ -1,5 +1,6 @@
 frontmatter.txt
 preface.md
+docker.md
 mainmatter.txt
 chapter01.md
 chapter02.md
