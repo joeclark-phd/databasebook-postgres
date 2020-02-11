@@ -6,7 +6,7 @@ Also, as far as I know, it's the only such textbook to use PostgreSQL as the dat
 
 ## An open-source book
 
-As of July 2019, I am re-starting this book project as a kind-of, sort-of, open source project.  The manuscript, along with its graphics and sample code, can be viewed in its [Github repository](https://github.com/joeclark-phd/databasebook-postgres).  Although I retain my copyright to the work, I welcome contributions, typo corrections, and improvements to the sample code.  I'll add more details about how you can contribute to the book as the project develops.
+As of February 2020, I am re-starting this book project as a kind-of, sort-of, open source project.  The manuscript, along with its graphics and sample code, can be viewed in its [Github repository](https://github.com/joeclark-phd/databasebook-postgres).  Although I retain my copyright to the work, I welcome contributions, typo corrections, and improvements to the sample code.  I'll add more details about how you can contribute to the book as the project develops.
 
 ## Structure of chapters
 
@@ -44,7 +44,7 @@ Two other cases will be described and offered as homework.
 
 LESSONbinder will be a learning management system (LMS) of the type that most colleges use today.  It will be up to you, the reader, to implement its database.  My "answers" to this homework case study will be available only in the instructor manual for faculty using this course to teach. Instructors, go ahead and e-mail me to request a copy.
 
-PalletTABLE will be a more challenging exercise, a database to support a manufacturing planning system (a type of systemcommonly called manufacturing resource planning or MRP).  My implementation of a solution to this exercise will be available in a separate online resource that solo learners can request, separate so you'll be encouraged to work through the problem yourself before looking "in the back of the book".
+PalletTABLE will be a more challenging exercise, a database to support a manufacturing planning system (a type of system commonly called manufacturing resource planning or MRP).  My implementation of a solution to this exercise will be available in a separate online resource that solo learners can request, separate so you'll be encouraged to work through the problem yourself before looking "in the back of the book".
 
 ## How to use the book
 
