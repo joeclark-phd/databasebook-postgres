@@ -44,7 +44,7 @@ A> If your goal is simply to learn SQL or relational data modeling, though, SQLi
 
 ### What you'll learn from this book
 
-This book will introduce you to **relational databases**, with data modeling and the SQL language first and foremost.  It covers the scope of a typical first database course in an information systems or analytics program at the university level.  It can be used as a textbook for an instructor-led course---instructors, please contact the author for an instructor's guide, slides and materials---or used for self-guided study with or without the video lectures produced by the author (coming soon via Leanpub).
+This book will introduce you to **relational databases**, with data modeling and the SQL language first and foremost.  It covers the scope of a typical first database course in an information systems or analytics program at the university level.  It can be used as a textbook for an instructor-led course---instructors, please contact the author for an instructor's guide, slides and materials---or used for self-guided study with or without the video lectures produced by the author (coming soon on Youtube and Leanpub).
 
 My main goal in creating this book is to make data modeling and SQL understandable to the reader, so it may serve as a good low-cost supplement for students who are struggling with a theory-heavy textbook and having a hard time getting the point.  Instead of starting with loads of theory up-front, I'll take a more pragmatic approach based on relational data modeling "patterns" and examples.  
 
