@@ -396,13 +396,19 @@ TBD
 3. Look up the documentation on data types supported by PostgreSQL.  There are a lot of them.  Make a short list (or a cheat sheet) of the five or six data types you think you'd use most often.
 4. Try to find out on your own how to use the "ALTER TABLE" command to add a new column to an existing table.  Specifically, add a "date" column to the "purchases" table used as an example in this chapter.
 5. PostgreSQL offers a graphical user interface (GUI) called **pgAdmin**, which may have been installed with it.  Find this program on your computer or install it, and figure out how to log in to your PostgreSQL database(s) with it.
-6. On your own, figure out how to use pgAdmin to create a new table in the "lab1" database.  Make sure it has a primary key column.  Can you add some sample data to the table without having to use SQL "INSERT" commands?
+6. On your own, figure out how to use pgAdmin to create a new table in the "auctagon" database.  Make sure it has a primary key column (i.e., a unique ID number or code).  Can you add some sample data to the table without having to use SQL "INSERT" commands?
 7. See if you can find out how to open a window within pgAdmin to execute arbitrary SQL commands.  Run some of the example SQL queries from this chapter through that interface.
 8. Other graphical clients for PostgreSQL (besides pgAdmin) are available, some free (or free to students) and some commercial.  Find and examine one or two of these alternatives.  What do you think of them?
 
 ### Exercises
 
-TBD
+TODO
+
+### Supplemental Lab 1: Creating FrienduLATER
+
+A second case study that runs through this textbook is a database for a social networking application called FrienduLATER.  In this lab, we're starting with a single table that stores messages posted to a user's "wall" or message board.  You'll want to be able to query for messages posted since the last time you logged in, in reverse chronological order, to query for messages from a specific subset of users, and perhaps to find out the number of unread messages and the last time a user was active.  This lab and a video to accompany it are coming soon.
+
+TODO
 
 ### Think About It
 

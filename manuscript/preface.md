@@ -38,7 +38,7 @@ Ten chapters are currently planned (however, as the book is unfinished, the plan
 
 Along the way, I'll take the reader through a number of case studies.  These will be relatively complete databases for realistic businesses--an e-commerce app, a social network, a manufacturing (MRP) system, and a learning management system--that we'll build up in chunks, a little bit each chapter.  How you'll experience each case study will vary.
 
-Two cases, an auction e-commerce app called AUCTagon and a social networking app called WebuLATER, will be built up by the author within the book's chapters.  These are demonstration cases that will allow us to give concrete examples of each chapter's concepts, and the code to reproduce them will be available on the book's Github repo.
+Two cases, an auction e-commerce app called AUCTagon and a social networking app called FrienduLATER, will be built up by the author within the book's chapters.  These are demonstration cases that will allow us to give concrete examples of each chapter's concepts, and the code to reproduce them will be available on the book's Github repo.
 
 Two other cases will be described and offered as homework.  
 
