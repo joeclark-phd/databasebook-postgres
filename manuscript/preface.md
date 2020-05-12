@@ -8,6 +8,10 @@ Also, as far as I know, it's the only such textbook to use PostgreSQL as the dat
 
 As of February 2020, I am re-starting this book project as a kind-of, sort-of, open source project.  The manuscript, along with its graphics and sample code, can be viewed in its [Github repository](https://github.com/joeclark-phd/databasebook-postgres).  Although I retain my copyright to the work, I welcome contributions, typo corrections, and improvements to the sample code.  I'll add more details about how you can contribute to the book as the project develops.
 
+## Companion videos
+
+I am producing video lessons as I write the chapters of this book.  You can view them at your own pace on YouTube -- the playlist is at https://www.youtube.com/playlist?list=PL9hjQ6vJTCde9_qagxk82jRVILkzJRy6Y.
+
 ## Structure of chapters
 
 Ten chapters are currently planned (however, as the book is unfinished, the plan may change).  Here is the plan:
