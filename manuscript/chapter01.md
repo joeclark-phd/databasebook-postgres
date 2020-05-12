@@ -104,20 +104,20 @@ To understand how we interact with PostgreSQL, though, you need a third definiti
 
 What we'll do in this first lab, then, is:
 
-1. Create a PostgreSQL database called "lab1"
+1. Create a PostgreSQL database called "auctagon"
 2. Log in to that database with `psql`
 3. Create a table of Purchases
 4. Query the single-table database with SQL
 
 #### Database creation
 
-You can create a database from your operating system's command line (i.e., before logging in to PostgreSQL with `psql` or another front-end tool), by using the command `createdb`.  The basic structure of this command is `createdb [OPTIONS] [DBNAME]`, and you can learn more by typing `createdb --help` at the command prompt.  Thus, the following command creates a database called "lab1":
+You can create a database from your operating system's command line (i.e., before logging in to PostgreSQL with `psql` or another front-end tool), by using the command `createdb`.  The basic structure of this command is `createdb [OPTIONS] [DBNAME]`, and you can learn more by typing `createdb --help` at the command prompt.  Thus, the following command creates a database called "auctagon":
 
-    $ createdb lab1
+    $ createdb auctagon
 
 If necessary, you can also drop (i.e., delete) the new database from the commmand line, with:
 
-    $ dropdb lab1
+    $ dropdb auctagon
     
 For future reference, you can also create and delete databases using SQL once you're logged in to `psql`: the CREATE DATABASE and DROP DATABASE commands, respectively.  One way or another, create that database, which will be home to your first table.
     
@@ -143,15 +143,15 @@ The change in the command prompt means you're in a different environment.  Here,
        
 By default, when you start `psql` you're connecting to the database with the same name as  your PostgreSQL username. If you installed Postgres using Docker, or used an installer on Windows, that will probably be "postgres".  If you installed it on a Mac or Linux machine, the default database may have the same name as your computer login name.  Any SQL commands you enter at the prompt will be executed on the default database's tables, and that isn't what we want.  To switch over to the new database you created, use the `\c` command:
 
-    postgres=# \c lab1
-    You are now connected to database "lab1" as user "postgres".
+    postgres=# \c auctagon
+    You are now connected to database "auctagon" as user "postgres".
     lab1=#
     
 Notice that the prompt changes to tell you which database you're working in.  
 
 #### Creating a table
 
-To create a table in the "lab1" database, we use the aptly-named SQL [`CREATE TABLE`](https://www.postgresql.org/docs/9.5/static/sql-createtable.html) command.  I will expand on its usage in Chapter 2, but the basic form of it is as follows:
+To create a table in the "auctagon" database, we use the aptly-named SQL [`CREATE TABLE`](https://www.postgresql.org/docs/9.5/static/sql-createtable.html) command.  I will expand on its usage in Chapter 2, but the basic form of it is as follows:
 
     CREATE TABLE table_name (
        column_name    data_type   [OPTIONS],
@@ -160,15 +160,17 @@ To create a table in the "lab1" database, we use the aptly-named SQL [`CREATE TA
 
 As I mentioned, one of the special characteristics of a relation is that each column allows data only of a specified type.  PostgreSQL offers a number of built-in data types, such as `numeric`, `text`, `date`, and more.  I will discuss the choice of data type more in Chapters 2 and 8, but it need not delay an introductory example.  There are many optional clauses available in the `CREATE TABLE` statement which can be discussed later or looked up in the documentation; the only one we need now is `PRIMARY KEY`, a flag which indicates that a particular column is going to contain unique values that may be used to look up specific rows later.
 
-The command to create our table of Purchases is as follows.  You may type this in at the `psql` prompt, even if it spans several lines.  The code won't execute until the semicolon (`;`) is reached.  Mind the cases: in PostgreSQL the SQL keywords (i.e. `CREATE TABLE`, `PRIMARY KEY`, and the data types) may be uppercase or lowercase, but you should only use lower case letters and underscores (`_`) for the table and column names.  PostgreSQL isn't very sensitive to whitespace, so you can enter this code all on one line, or spread out over several lines, with indentation and tabs if you want them.
+The command to create our table of Listings is as follows.  You may type this in at the `psql` prompt, even if it spans several lines.  The code won't execute until the semicolon (`;`) is reached.  Mind the cases: in PostgreSQL the SQL keywords (i.e. `CREATE TABLE`, `PRIMARY KEY`, and the data types) may be uppercase or lowercase, but you should only use lower case letters and underscores (`_`) for the table and column names.  PostgreSQL isn't very sensitive to whitespace, so you can enter this code all on one line, or spread out over several lines, with indentation and tabs if you want them.
 
-    CREATE TABLE purchases (
-    order_id integer PRIMARY KEY,
-    city text,
-    state char(2),
-    product text,
-    category text,
-    price numeric );
+    CREATE TABLE listings (
+        id serial,
+        title text,
+        description text,
+        start_price numeric,
+        create_date timestamp,
+        auction_end_date timestamp,
+        seller_name text
+    );
     
 If the command succeeded, you'll see "`CREATE TABLE`" in the output.  If there's an error message instead, don't worry, just try again.  The most likely causes of errors are typos in the data types, the wrong number of commas, and uppercase letters in the table or column names.  If the command worked but you defined the table incorrectly, the easiest solution is to start over by issuing the command `DROP TABLE purchases;` and creating the table anew.
 
@@ -176,23 +178,25 @@ You can confirm that the table exists with the `psql` command `\dt`, which displ
 
     lab1=# \dt
                List of relations
-     Schema |   Name    | Type  |  Owner   
-    ---------------------------------------
-     public | purchases | table | joeclark
+     Schema |   Name   | Type  |  Owner   
+    --------------------------------------
+     public | listings | table | joeclark
      (1 row)
 
 That's all there is to defining a table, at least an empty one.  In order for us to demonstrate some SQL queries, though, we'll need to store some data in the table with the SQL [`INSERT`](https://www.postgresql.org/docs/9.5/static/sql-insert.html) command.  We'll use the simplest form of this command, adding only one row at a time to the table, for example:
 
-    INSERT INTO purchases VALUES
-    (1001, 'Nashville', 'TN', 'Sea Kayak', 'Boating', 449);
+    INSERT INTO listings 
+    (title, description, start_price, create_date, auction_end_date, seller_name)
+    VALUES
+    ('old comic book', 'This is a classic!', 25.00, '2020-02-17 9:00AM', '2020-02-20 9:00AM', 'joe');
 
 Take note that text data must be wrapped in quotation marks (`'`), and numbers must not.
 
 Writing `INSERT` commands by hand will quickly become tiresome, and is not the usual mode of entering data into a real database.  Typically the database will support software (such as a web app, or an enterprise system) that generates data insertion and update commands automatically.  Another way we might load a lot of data quickly is to read in a file containing (presumably machine-generated) `INSERT` commands.  In `psql` you can execute SQL commands from a file using the `\i` command.
 
-I have provided a script file containing 100 lines of purchase data on the GitHub repository that supports this book.  You may find the file `purchases.txt` at https://github.com/joeclark-phd/databasebook-postgres, in the "psql_scripts" folder.  If I have downloaded this file to a Windows laptop and saved it in the directory `C:/psql_scripts`, the command looks like this:
+I have provided a script file containing 300 lines of purchase data on the GitHub repository that supports this book.  You may find the file `AUCTagon1.sql` at https://github.com/joeclark-phd/databasebook-postgres, in the "psql_scripts" folder.  If I have downloaded this file to a Windows laptop and saved it in the directory `C:/psql_scripts`, the command looks like this:
 
-    lab1=# \i c:/psql_scripts/purchases.sql
+    lab1=# \i c:/psql_scripts/AUCTagon1.sql
     INSERT 0 1
     ...
     
@@ -206,75 +210,91 @@ SQL is the structured query language more or less common to all relational datab
 
 Let's start with the basics.  Your first query is the simplest: it just requests *all* the data.
 
-    SELECT * FROM purchases;
+    SELECT * FROM listings;;
     
 That's quite a lot of rows, so I'll give you a trick to shorten the results.  Affix "LIMIT <number>" to the end of the query to get only the first several rows:
 
-    SELECT * FROM purchases
+    SELECT * FROM listings
     LIMIT 10;
     
-The meaning of the "`*`" is "all columns".  It's possible to request only certain columns, for example, let's say you only want to know the cities and states that your customers are ordering from.  Specify the desired columns in the "SELECT" clause:
+The meaning of the "`*`" is "all columns".  It's possible to request only certain columns, for example, let's say you only want to know the title and starting price of each auction listing.  Specify the desired columns in the "SELECT" clause:
 
-    SELECT city, state
-    FROM purchases
+    SELECT title, start_price
+    FROM listings
     LIMIT 10;
 
-Most of the time you don't want every row, but want to select a subset of the data.  This is accomplished with the "WHERE" clause of a query.  You may request a single row by its primary key, for example:
+An optional addition to the query is the "ORDER BY" clause, which (as you might guess) determines the sort order of the results.  Since we are limiting the results to only 10 rows, this query would give you the ten lowest-priced auctions:
+
+    SELECT title, start_price
+    FROM listings
+    ORDER BY start_price
+    LIMIT 10;
+
+Most of the time you don't want every row, but want to select a subset of the data.  This is accomplished with the "WHERE" clause, certainly one of the most important clauses in a query.  You may request a single row by its primary key, for example:
 
     SELECT *
-    FROM purchases
-    WHERE order_id = 1011;
+    FROM listings
+    WHERE id=150;;
     
 Or you may give criteria that qualify more than one row, if you want to see a specific subset.  For example:
 
     SELECT *
-    FROM purchases
-    WHERE state='ME';
+    FROM listings
+    WHERE seller_name='Pete K';
     
 The criteria don't have to be "equality" conditions, by the way.  We can also use numerical inequalities; any row for which the inequality is "true" will be returned:
 
-    SELECT city, state, product
-    FROM purchases
-    WHERE price > 500;
-    
-Another condition you might use, for a primitive text search, is "LIKE".  The "`%`" character is a wildcard that matches any text.  Thus, the following code returns all data where the product name *ends* in "Kayak" but would not return data where there was additional text *after* that word.
+    SELECT *
+    FROM listings
+    WHERE auction_end_date < '2020-02-17';
 
-    SELECT city, state, product
-    FROM purchases
-    WHERE product LIKE '%Kayak';
+You can stitch together multiple conditions with "AND" and "OR" to make a more complex query.  For example, if you want to find all auctions ending within a particular date range, you can use something like this:
+
+    SELECT *
+    FROM listings
+    WHERE auction_end_date > '2020-02-17'
+        AND auction_end_date < '2020-02-24';
+    
+Another condition you might use, for a primitive text search, is "LIKE".  The "`%`" character is a wildcard that matches any text.  Thus, the following code returns all auctions that end with "Handplane":
+
+    SELECT *
+    FROM listings
+    WHERE title LIKE '%Handplane';
+
+Substitute "ILIKE" for a case-insensitive match.
     
 #### Aggregate queries
 
 The queries above allow you to carve out subsets of the data by requesting only certain columns, certain rows, or both.  In every example, though, the rows you get in the result are rows from the original table.  Aggregate queries are those that generate data by combining the original rows via an **aggregation function**, usually `SUM`, `COUNT`, or `AVG`.  Obviously the sum of two rows is one row, and is not identical to either of the original rows.  The following query gives you the total dollar amount of all purchases in the table:
 
-    SELECT SUM(price)
-    FROM purchases;
+    SELECT AVG(start_price)
+    FROM listings;
 
 No matter how many rows were in the original table, the query above returns just one row.  Say... how many rows *are* in the original table?
 
-    SELECT COUNT(order_id)
-    FROM purchases;
+    SELECT COUNT(id)
+    FROM listings;
     
-The `COUNT` function actually counts the number of non-null values in the specified column, not the number of unique values.  If you used `COUNT(state)` instead of `COUNT(order_id)` you'd get the same result.  Even if you have five hundred purchases in 50 states, the `COUNT` would be 500, not 50.  If you have set up the table to allow nulls (empty or missing values) in the specified column, then you might get a result of less than 500.  If you want to be sure to get exactly the total number of rows, simply use `COUNT(*)`.
+The `COUNT` function actually counts the number of non-null values in the specified column, not the number of unique values.  If you used `COUNT(seller_name)` instead of `COUNT(order_id)` you'd get the same result.  Even if you have five hundred listings from 25 sellers, the `COUNT` would be 500, not 25.  If you have set up the table to allow nulls (empty or missing values) in the specified column, then you might get a result of less than 500.  If you want to be sure to get exactly the total number of rows, simply use `COUNT(*)`.
 
-A grand total (or count, or average) is interesting, but a lot of the time what we want to do are compare subtotals (or counts, or averages) for various groupings of the data.  To do this, we introduce a "GROUP BY" clause.  If we want to know how many purchases were made in each of several categories, we can group by the "category" column and count up the rows in each group:
+A grand total (or count, or average) is interesting, but a lot of the time what we want to do are compare subtotals (or counts, or averages) for various groupings of the data.  To do this, we introduce a "GROUP BY" clause.  If we want to know how many listings were made by each seller, we can group by the "seller_name" column and count up the rows in each group:
 
-    SELECT category, COUNT(*)
-    FROM purchases
-    GROUP BY category;
+    SELECT seller_name, COUNT(*)
+    FROM listings
+    GROUP BY seller_name;
     
-If you want to know which products account for the largest portions of your revenue, you might group by product and sum the order prices.  There are a lot of products, though, so it's helpful to sort the results with an "ORDER BY" clause.  Since the sum is the 2nd column of the result data, that'll be "ORDER BY 2".
+If you want to know which sellers are listing the biggest-ticket items, you might group by seller and take an average of the starting prices.  There are a lot of sellers, though, so it'd helpful to sort the results with an "ORDER BY" clause.  Since the average is the unnamed second column of the result set, that'll be "ORDER BY 2".
 
-    SELECT product, SUM(price)
-    FROM purchases
-    GROUP BY product
+    SELECT seller_name, AVG(start_price)
+    FROM listings
+    GROUP BY seller_name
     ORDER BY 2;
 
 To get just the top ten, here's a trick: sort the data in descending ("DESC") order, and "LIMIT" the results to just the first ten rows.
 
-    SELECT product, SUM(price)
-    FROM purchases
-    GROUP BY product
+    SELECT seller_name, AVG(start_price)
+    FROM listings
+    GROUP BY seller_name
     ORDER BY 2 DESC
     LIMIT 10;
     
