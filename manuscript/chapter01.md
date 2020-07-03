@@ -56,7 +56,7 @@ Rest assured that the lessons of this book are transferable to other relational 
 
 A> If this book finds any significant success with readers, I fully intend to create additional versions of the text that highlight SQLite, MySQL, Access, or whatever other platforms people are interested in.  Give me feedback through Leanpub!
 
-## Lab 1: your first PostgreSQL database
+## Lab 1A: your first PostgreSQL database
 
 ### Up and running with Postgres
 
@@ -303,6 +303,39 @@ To get just the top ten, here's a trick: sort the data in descending ("DESC") or
 In Chapter 2 and beyond you'll learn a lot more SQL, such as how to create queries that "join" multiple tables, and how to write queries that employ nested sub-queries.  Even in this example, though, you've seen several of the main parts of a `SELECT` query, including the "WHERE", "GROUP BY", and "ORDER BY" clauses, and aggregate queries.  You have begun to see that even a simple one-table database may be queried in several different ways, and that doing this with short SQL queries may be much easier than trying to wrangle the data in Excel.
 
 I recommend that you attempt the exercises and challenges at the end of this chapter to get more practice with the basics of relational databases, SQL, and PostgreSQL specifically.
+
+## Lab 1F: A second example to reinforce this introduction to SQL
+
+In addition to the AUCTagon e-commerce example, we'll be building up a social networking database called FRIENDulater in each chapter of this book.  This'll give us a chance to exercise the same skills again, and show off some additional techniques that might not have been applicable to AUCTagon.  In these lab sections, I'll introduce the business **requirements** first, then the design and implementation of a solution.
+
+### Requirements: a message stream for a network node
+
+In this chapter we'll pick a problem that can be solved with a single table.  In our social network, every user is a "node", but so are groups, events, and perhaps some other entities such as news stories or videos.  Each of these can accept a stream of messages posted by users, whether you call that a "comment board" or a "message wall".  It should be possible to retrieve messages in reverse chronological order (latest messages first), to generate statistics about how many messages have been posted in a given time period and who has posted them, and for creators to edit or delete messages.
+
+### Design: a "messages" table
+
+Assuming that the posts/comments/messages are simply text without attachments (no audio, video, or photo comments for now), then a message consists of just a few necessary pieces of information: the node we're posting on, the identification of the user posting the message, the date and time of the message, and the text of the message itself.  We could add a lot more, for example a count of likes/favorites/upvotes on the post, or a list of users tagged in the post, but I'll save these for a future chapter because I think they're best implemented with a multi-table design.  For now, all we really need is the four basic pieces of information.  To implement the table in Postgres, we will also need a primary key column, basically a machine-generated unique integer for each post.  
+
+What are the implications of the requirement that posts be editable and deletable? The key questions to ask are, how much do we want to retain of the history of a message before the edit or deletion?  If we, the developers of the system, want to be able to review deleted posts or review earlier versions of edited posts (perhaps so we can give the user an "undo" button), then we won't want to really delete the data.  Instead, we could put a boolean (true/false) column in the table to act as a flag to indicate if the post is deleted.  We would implement a deletion by setting that flag to "true", or implement an edit by marking it "true" and inserting a *new* row with the updated post.  Such a policy has implications for user privacy that our customers' may not like, though: they may want a message to be truly wiped clean when they hit "delete".  For our application, I won't retain deleted data, but I'll do one thing I've found useful in almost every real-world database: add a "last updated" timestamp.  This is useful as an indicator that a comment *was* updated, in addition to telling us *when*, without keeping around the old data that users might not want us to keep.
+
+### Implementation
+
+#### Creating the table
+
+#### Message stream and statistics
+
+- messages for given node and time span
+- message activity for given poster
+- distinct posters for given node and time span
+- distinct nodes for given poster
+- statistics on most popular nodes
+
+#### Updates and deletions
+
+- deletion with a WHERE clause, show that data is gone for good
+- updating and pinging the last-update timestamp
+- use COALESCE to include updates in message stream queries above
+
 
 ## Summary
 
