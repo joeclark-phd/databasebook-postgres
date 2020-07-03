@@ -322,6 +322,25 @@ What are the implications of the requirement that posts be editable and deletabl
 
 #### Creating the table
 
+Here's a tip: when creating a SQL script to create a table, begin it with a one-liner to drop (i.e. delete) the table.  That way, if you have to run and re-run your script a few times before you get the design just right, the `DROP TABLE` command will run just before the `CREATE TABLE` command and you won't end up getting errors that tell you you can't create the table because one already exists with that name.  Here's my script:
+
+    DROP TABLE IF EXISTS messages;
+    CREATE TABLE messages (
+        id serial PRIMARY KEY,
+        node text NOT NULL,
+        poster text NOT NULL,
+        message_body text,
+        create_date timestamp DEFAULT now(),
+        last_update timestamp
+    );
+
+As you can see, I've added a "NOT NULL" constraint to a couple of columns.  This means just what it sounds like: no row of the table can have an empty value in that column.  Both the "node" and "poster" columns here are defined as having `text` data; my intention is to put the username of the node and the username of the person posting the message in these fields.  In the next chapter, we'll look at a multi-table design where these become foreign-key references to other tables, but for now this simple implementation is good enough.
+
+I've also specified a "DEFAULT" value for the "create_date" field; if no value is provided in the INSERT statement, a new row will put the current date and time into that field.  (That's what's provided by the `now()` function in Postgres.)
+
+I have again provided a SQL script file to create this table and insert 300 rows of sample data, which you can download from [the book's Github repo](https://github.com/joeclark-phd/databasebook-postgres).  It's under the "psql_scripts" directory and is called "FRIENDulater1.sql".  Download and run this script now, and then we can try querying the data.
+
+
 #### Message stream and statistics
 
 - messages for given node and time span
