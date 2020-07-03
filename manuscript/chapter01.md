@@ -104,10 +104,10 @@ To understand how we interact with PostgreSQL, though, you need a third definiti
 
 What we'll do in this first lab, then, is:
 
-1. Create a PostgreSQL database called "auctagon"
-2. Log in to that database with `psql`
-3. Create a table of Purchases
-4. Query the single-table database with SQL
+2. Create a new PostgreSQL database called "auctagon" 
+3. Create a table of auction Listings
+4. Add some sample data to that table
+5. Query the single-table database with SQL
 
 #### Database creation
 
@@ -121,6 +121,8 @@ If necessary, you can also drop (i.e., delete) the new database from the commman
     
 For future reference, you can also create and delete databases using SQL once you're logged in to `psql`: the CREATE DATABASE and DROP DATABASE commands, respectively.  One way or another, create that database, which will be home to your first table.
     
+A> In addition to the command-line tools described here, there are a variety of graphical user interfaces (GUIs) that can allow you to work with databases by pointing and clicking.  In the video series that accompanies this book, I use the **pgAdmin** tool that comes free with Postgres.
+
 #### Introducing `psql`
 
 The command-line client for PostgreSQL is `psql`, and you launch it by entering `psql` on the command line.  This will not open a new window, but rather you will see a brief welcome and the command prompt will be different from the operating system's default prompt.
@@ -234,7 +236,7 @@ Most of the time you don't want every row, but want to select a subset of the da
 
     SELECT *
     FROM listings
-    WHERE id=150;;
+    WHERE id=150;
     
 Or you may give criteria that qualify more than one row, if you want to see a specific subset.  For example:
 
@@ -242,7 +244,7 @@ Or you may give criteria that qualify more than one row, if you want to see a sp
     FROM listings
     WHERE seller_name='Pete K';
     
-The criteria don't have to be "equality" conditions, by the way.  We can also use numerical inequalities; any row for which the inequality is "true" will be returned:
+The criteria don't have to be "equality" conditions, by the way.  We can also use numerical inequalities (greater than, less than, etc.); any row for which the inequality is "true" will be returned:
 
     SELECT *
     FROM listings
