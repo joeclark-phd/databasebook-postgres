@@ -398,10 +398,61 @@ What was the very last message posted on the site?  We can use ORDER BY and LIMI
 
 #### Updates and deletions
 
-- deletion with a WHERE clause, show that data is gone for good
-- updating and pinging the last-update timestamp
-- use COALESCE to include updates in message stream queries above
+You've seen how to INSERT data, but not how to modify or delete it yet, so let's take a look at that.  In either case, the WHERE clause is very critical.  If you instruct the database to `DELETE FROM messages` but don't give it a WHERE clause, you'll delete all data in the table---every single row!  It is in these queries that we'll find the primary key columns very useful.
 
+To delete a comment, first find its "id".  We didn't assign ID values in the script that loaded the sample data, so they would have been assigned automatically (probably the numbers 1 through 300, but not necessarily).  In this case, I'll delete comment #176, the one I found with the last SELECT query, above.  Here's the deletion:
+
+    DELETE FROM messages
+    WHERE id=176;
+
+It's possible that the WHERE clause might not match any rows, in which case it'll have no effect.  That'll be the case if you run the above statement a second time, and it's no problem for the database.  Nowhere is it stated that the WHERE clause match one and only one row.  You could use a WHERE clause that deletes several rows, for example, all the posts by a particular user:
+
+    DELETE FROM messages
+    WHERE poster='gary';
+
+To modify a row, we use an UPDATE statement with a SET clause:
+
+    UPDATE messages
+    SET message_body='huzzah'
+    WHERE id=88;
+
+It's possible to modify more than one field at once, and we'll use that capability to make sure the "last update" timestamp is updated every time we edit a message.  One way to do that is to list the updates sequentially after SET, separated by commas:
+
+    UPDATE messages
+    SET message_body='booyah!', last_update=now()
+    WHERE id=88;
+
+Another way to do the same thing, which is also grammatically correct in SQL, is to give a parenthetical list of the fields to be updated, then give a parenthetical list of the new values, somewhat like an INSERT statement.  This statement has the same effect as the one above it (except for the message body, of course!):
+
+    UPDATE messages
+    SET (message_body, last_update) = ('fiddlesticks!', now())
+    WHERE id=88;
+
+Now we have a new piece of data in the table that users might want to know about: we can tell which posts have been edited, and when.  Here's a query to find every post that has been edited:
+
+    SELECT *
+    FROM messages
+    WHERE last_update IS NOT NULL
+    ORDER BY last_update DESC;
+
+Since unmodified posts have never had a value assigned to the "last_update" field, the value is NULL, i.e. an empty value.  This is not the same thing as a zero or a blank text string; NULL specifically means that there is no data in the field at all.  We can check for that condition with the clauses "IS NULL" and "IS NOT NULL".
+
+I add creation and "last update" timestamps on a lot of my data tables, and one of the things I generally want to do with them is sort data by when it was last modified.  That can *either* mean it was recently created *or* that it was recently updated.  This means that we need some conditional logic: if "last_update" IS NOT NULL, use that value, otherwise use "create_date".  Checking arbitrary conditions is certainly possible in SQL, and we'll get to it later, but for this very common problem PostgreSQL provides a convenient function called [`COALESCE`](https://www.postgresql.org/docs/current/functions-conditional.html#FUNCTIONS-COALESCE-NVL-IFNULL).
+
+    SELECT node, poster, message_body,
+        COALESCE(last_update, create_date) AS last_modified
+    FROM messages
+    ORDER BY last_modified DESC;
+
+COALESCE accepts a list of any number of fields, and returns the first one in the list that's NOT NULL.
+
+Finally, as with DELETE statements, UPDATE statements can affect more than one row.  That could be useful for something like the correction of an error, or the change of a name.
+
+    UPDATE messages
+    SET poster='andrew'
+    WHERE poster='andy';
+
+As with our AUCTagon case study, this example has kept things very simple, only using a single table and limiting ourselves to pretty straightforward SQL, but nonetheless we've been able to query the data in quite a variety of ways.  In the next chapter, you'll begin to get a taste of how much more we can do with multiple tables working together in a database.
 
 ## Summary
 
