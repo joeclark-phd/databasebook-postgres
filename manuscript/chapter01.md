@@ -335,11 +335,66 @@ I have again provided a SQL script file to create this table and insert 300 rows
 
 #### Message stream and statistics
 
-- messages for given node and time span
-- message activity for given poster
-- distinct posters for given node and time span
-- distinct nodes for given poster
-- statistics on most popular nodes
+There are quite a few interesting queries that we might run against our messages table.  If we're generating a web page for a particular "node", we may simply want all the messages in reverse chronological order:
+
+    SELECT *
+    FROM messages
+    WHERE node='8'
+    ORDER BY create_date DESC;
+
+Notice that the nodes in my data look like numbers but are actually "text" data, so we need singlequotes around the digit "8" in that WHERE clause.  We want to ORDER BY each message's data in *descending* order, that is with the most recent post at the top, so we used the "DESC" keyword.
+
+In practice we'd probably want to limit the results we show by timespan, for example showing only the new posts since the user last logged in, and by poster, for example showing only those who are our friends, so let's add a bit more to that WHERE clause:
+
+    SELECT *
+    FROM messages
+    WHERE node='8'
+        AND create_date > '2020-08-25 2:00:00PM'
+        AND poster IN ('fran','andy','dawn')
+    ORDER BY create_date DESC;
+
+The "IN" operator returns a value of "true" if the field matches any of the values in the parenthetical list.  It can be a very handy one in a lot of situations.
+
+We might also generate a web page for the user profile, and want to see what a particular user posted (to any node) during the specified time frame.  This is almost the same query, except conditioned on the poster rather than the node:
+
+    SELECT *
+    FROM messages
+    WHERE poster='irving'
+        AND create_date > '2020-08-25 8:30:00AM'
+    ORDER BY create_date DESC;
+
+You might also want to show some activity statistics for a user; rather than showing all the messages, you might want to say which nodes the user posted to (e.g., "Dawn made posts on [this list of nodes] since your last visit").  To find this, we can select for DISTINCT values of the "node" column:
+
+    SELECT DISTINCT node
+    FROM messages
+    WHERE poster='dawn'
+        AND create_date > '2020-08-25 5:30:00PM'
+    ORDER BY node;
+
+Or we could perform a COUNT so we can show the user just how many times the user posted to each of those nodes:
+
+	SELECT node, COUNT(*)
+	FROM messages
+	WHERE poster='dawn'
+		AND create_date > '2020-08-25 5:30:00PM'
+	GROUP BY node
+	ORDER BY node;
+
+Another thing your users might want to know is when the last message was posted on any given node.  What we're looking for, really, is the maximum of the timestamp. Here we are also filtering only for posts from a small set of friends and only since our last login time:
+
+    SELECT node, MAX(create_date) AS time_of_last_post
+    FROM messages
+    WHERE poster in ('ernest','hannah')
+        AND create_date > '2020-08-25 2:00PM'
+    GROUP BY node
+    ORDER BY node;
+
+What was the very last message posted on the site?  We can use ORDER BY and LIMIT together to get a list of the lowest or highest values of any column.
+
+    SELECT *
+    FROM messages
+    ORDER BY create_date DESC
+    LIMIT 1;
 
 #### Updates and deletions
 
