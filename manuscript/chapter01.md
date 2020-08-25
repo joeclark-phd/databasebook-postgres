@@ -1,12 +1,4 @@
-# Chapter 1: Introducing databases and PostgreSQL
-
-## How databases fit in
-
-Imagine that you work in a small direct-response mail order company that takes orders from customers by phone.  Each agent in the call center downstairs has a stack of paper order forms on his desk, and when he receives an order he writes down the product name(s), quantity ordered, and the customer's address and payment information.  He uses a calculator or computer to sum up the order total, and tells the customer how much they'll be charged.  
-
-Periodically, a data entry worker visits the call center and picks up stacks of filled-in order forms.  She enters each order's details into a file on her desktop computer, perhaps a big Excel spreadsheet that she's designed herself for this task.  At the end of the day, when all the orders are entered, she sends the complete file to two other departments: fulfillment, which processes the customer's credit card and packs and ships the orders, and accounting, which calculates each salesperson's commission.
-
-This is the kind of process that a small business might develop when it's first getting started, and in fact, it's exactly the process that I encountered when I was first learning about databases at a small company in Maine.  Unfortunately, simple processes like this tend to get complicated as the company gets bigger, and can become impossible to maintain.  Just a few of the challenges this company might face are:
+sses like this tend to get complicated as the company gets bigger, and can become impossible to maintain.  Just a few of the challenges this company might face are:
 
 - When the business grows to the point that multiple data entry workers are needed, they must coordinate their work somehow.  Perhaps each worker creates her own file, and they must combine them at the end of the day.  There are many opportunities for errors to enter the system.
 
@@ -212,7 +204,7 @@ SQL is the structured query language more or less common to all relational datab
 
 Let's start with the basics.  Your first query is the simplest: it just requests *all* the data.
 
-    SELECT * FROM listings;;
+    SELECT * FROM listings;
     
 That's quite a lot of rows, so I'll give you a trick to shorten the results.  Affix "LIMIT <number>" to the end of the query to get only the first several rows:
 
@@ -338,7 +330,7 @@ As you can see, I've added a "NOT NULL" constraint to a couple of columns.  This
 
 I've also specified a "DEFAULT" value for the "create_date" field; if no value is provided in the INSERT statement, a new row will put the current date and time into that field.  (That's what's provided by the `now()` function in Postgres.)
 
-I have again provided a SQL script file to create this table and insert 300 rows of sample data, which you can download from [the book's Github repo](https://github.com/joeclark-phd/databasebook-postgres).  It's under the "psql_scripts" directory and is called "FRIENDulater1.sql".  Download and run this script now, and then we can try querying the data.
+I have again provided a SQL script file to create this table and insert 300 rows of sample data, which you can download from [the book's Github repo](https://github.com/joeclark-phd/databasebook-postgres).  It's under the "psql_scripts" directory and is called "FRIENDulater01.sql".  Download and run this script now, and then we can try querying the data.
 
 
 #### Message stream and statistics
